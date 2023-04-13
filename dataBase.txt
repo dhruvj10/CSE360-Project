@@ -1,0 +1,124 @@
+2
+Type 1.
+Sports Video Games
+2
+Project 1:
+Madden 24
+2
+BackLog Item 1:
+Main Menu
+4
+2
+1
+Defect 1:
+Loss of Connection
+2
+4
+7
+BackLog Item 2:
+Franchise Mode
+9
+10
+1
+Defect 1:
+AI trade logic errors
+7
+4
+6
+Project 2:
+Fifa 24
+2
+BackLog Item 1:
+Ultimate Team
+6
+7
+1
+Defect 1:
+Hacking
+2
+8
+9
+BackLog Item 2:
+Exhibition
+3
+7
+1
+Defect 1:
+Keeper Logic
+3
+4
+4
+Type 2.
+Social Media Apps
+2
+Project 1:
+Instagram
+3
+BackLog Item 1:
+UserInterface
+12
+2
+1
+Defect 1:
+Frozen Screen
+6
+4
+4
+BackLog Item 2:
+Direct Messaging
+6
+4
+1
+Defect 1:
+Activity Light not working
+3
+4
+2
+BackLog Item 3:
+Posting
+3
+22
+1
+Defect 1:
+Loss of Connection
+3
+14
+4
+Project 2:
+Facebook
+3
+BackLog Item 1:
+My Wall
+9
+6
+1
+Defect 1:
+Identity Theft
+6
+10
+10
+BackLog Item 2:
+Friending people
+3
+2
+1
+Defect 1:
+Blocking people
+3
+5
+3
+BackLog Item 3:
+Posting
+9
+7
+2
+Defect 1:
+Loss of Connection
+1
+10
+7
+Defect 2:
+Incorrect Privacy Setting
+5
+2
+2
