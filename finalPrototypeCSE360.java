@@ -15,9 +15,8 @@ package Prototype;
  /*import java.nio.file.Files;
  import java.nio.file.Path;
  import java.nio.file.Paths;*/
- import java.io.*; 
- import java.io.File;
- import java.util.*;
+ import java.io.*;
+import java.util.*;
  import java.util.Scanner;
 
 /*import java.io.*;
@@ -77,9 +76,38 @@ import java.util.Scanner;*/
             String line;
             while ((line = br.readLine()) != null) {
                 // process the line
-                if(username.equals(br.readLine())){
+                if(username.equals(line)){
                     if(password.equals(br.readLine())) {
+                    	//********************************
+                    	// Now asks if we want to make a new project or edit an old one
+                    	//*********************************
                         System.out.println("Access Granted");
+                        System.out.println("Would you like to:");
+                        System.out.println("1. Create a new project");
+                        System.out.println("2. Edit an existing project");
+                        String option = input.nextLine();
+                        //**************************
+                        //Same thing we had before
+                        //**************************
+                        if (option.equals("1")) {
+                        	createProject();
+                        }
+                        //***************************
+                        // Now we can load a project saved in a text file
+                        //***************************
+                        else if (option.equals("2")) {
+                        	System.out.println("What is the path to your project?");
+                        	String path = input.nextLine();
+                        	Project myP = new Project();
+                        	//*************************
+                        	// Sets project to what was saved in the file and allows you to view/edit
+                        	//*************************
+                        	myP.load(path);
+                        	myP.edit();
+                        }
+                        else {
+                        	System.out.println("Eror, please select a valid option.");
+                        }
                     }
                     else{
                         System.out.println("Access Denied");
@@ -92,7 +120,6 @@ import java.util.Scanner;*/
             //br.close();
             //scanner.close();
             //input.close();
-            createProject();
         }
 
     }
@@ -104,7 +131,6 @@ import java.util.Scanner;*/
        String NewUser = input4.next();
         brw.write(NewUser + System.lineSeparator());
         brw.flush();
-
 
         System.out.println("Create a Password : ");
        String NewPass = input4.next();
@@ -266,174 +292,17 @@ public static void createProject() throws IOException {
          
          // repeatedly ask the Scrum master to print all backLog items
          // or search for, edit, add or remove a backlog item
-           String input = "";
-           int num = -1;
-        do {
-            //System.out.println(myProject.toString());
-            System.out.println("Press s to search for a backLog item.");
-            System.out.println("Press e to edit for a backLog item.");
-            System.out.println("Press a to add for a backLog item.");
-            System.out.println("Press d to delete for a backLog item.");
-            System.out.println("Press P to print all backLog items.");
-            System.out.println("Press q to end.");
-            input = keySc.nextLine();
-            
-            switch (input) {
-               case "p":
-                   System.out.println(myProject.toString());
-                   break;
-                
-                  case "s":
-                 System.out.println("Enter the first few letters of the item you would like to search.\n");
-                 input = keySc.nextLine();
-                 for (int i = 0; i < myProject.backLogItems.size(); i++) {
-                     if (myProject.backLogItems.get(i).getName().startsWith(input)) {
-                         System.out.print(myProject.backLogItems.get(i).toString());
-                     }
-                 }
-                 
-                 break;
-               case "e":
-                 // code block
-                   System.out.println("Enter the index name of the item you would like to edit.");
-                   input = keySc.nextLine();
-                   num = Integer.parseInt(input);
-                   num--;
-                   int index = num;
-                   System.out.println(myProject.backLogItems.get(index).toString() + "\n\n");
-                   do {
-                       System.out.println("Enter 1 to change the name or 0 to leave it.");
-                       input = keySc.nextLine();
-                       if (input.equals("1")) {
-                           System.out.println("Enter new name.");
-                           input = keySc.nextLine();
-                           myProject.backLogItems.get(index).setName(input);
-                       }
-                       
-                       System.out.println("Enter 1 to change the difficulty or 0 to leave it.");
-                       input = keySc.nextLine();
-                       num = Integer.parseInt(input);
-                       if (num == 1) {
-                           System.out.println("Enter new difficulty.");
-                           input = keySc.nextLine();
-                           num = Integer.parseInt(input);
-                           myProject.backLogItems.get(index).setDif(num);
-                       }
-                       
-                       System.out.println("Enter 1 to change the time or 0 to leave it.");
-                       input = keySc.nextLine();
-                       num = Integer.parseInt(input);
-                       if (num == 1) {
-                           System.out.println("Enter new time.");
-                           input = keySc.nextLine();
-                           num = Integer.parseInt(input);
-                           myProject.backLogItems.get(index).setTime(num);
-                       }
-                       
-                       for (int i = 0; i < myProject.backLogItems.get(index).defects.size(); i++) {
-                           System.out.println("Enter 1 to change the name or 0 to leave it.");
-                           input = keySc.nextLine();
-                           if (num == 1) {
-                               System.out.println("Enter new name.");
-                               input = keySc.nextLine();
-                               myProject.backLogItems.get(index).defects.get(i).setName(input);
-                           }
-                           
-                           System.out.println("Enter 1 to change the difficulty or 0 to leave it.");
-                           input = keySc.nextLine();
-                           num = Integer.parseInt(input);
-                           if (num == 1) {
-                               System.out.println("Enter new difficulty.");
-                               input = keySc.nextLine();
-                               num = Integer.parseInt(input);
-                               myProject.backLogItems.get(num).defects.get(i).setDif(num);
-                           }
-                           
-                           System.out.println("Enter 1 to change the time or 0 to leave it.");
-                           input = keySc.nextLine();
-                           num = Integer.parseInt(input);
-                           if (num == 1) {
-                               System.out.println("Enter new time.");
-                               input = keySc.nextLine();
-                               num = Integer.parseInt(input);
-                               myProject.backLogItems.get(index).defects.get(i).setTime(num);
-                           }
-                           
-                           System.out.println("Enter 1 to change the recurrency or 0 to leave it.");
-                           input = keySc.nextLine();
-                           num = Integer.parseInt(input);
-                           if (num == 1) {
-                               System.out.println("Enter new recurrence.");
-                               input = keySc.nextLine();
-                               num = Integer.parseInt(input);
-                               myProject.backLogItems.get(index).defects.get(i).setRec(num);
-                           }
-                       }
-                       System.out.println("Enter d to quit");
-                       input = keySc.nextLine();
-                   } while (!(input.equals("d")));
-                 break;
-               case "a":
-                 // code block
-                 do {
-                     BackLogItem t = new BackLogItem();
-                     System.out.println("Enter backLog item name.");
-                     input = keySc.nextLine();
-                     t.setName(input);
-                     System.out.println("Enter backLog item difficulty.");
-                     input = keySc.nextLine();
-                     num = Integer.parseInt(input);
-                     t.setDif(num);
-                     System.out.println("Enter backLog item time.");
-                     input = keySc.nextLine();
-                     num = Integer.parseInt(input);
-                     t.setTime(num);
-                     do {
-                         Defect d = new Defect();
-                         System.out.println("Enter defect name.");
-                         input = keySc.nextLine();
-                         d.setName(input);
-                         System.out.println("Enter defect difficulty.");
-                         input = keySc.nextLine();
-                         num = Integer.parseInt(input);
-                         d.setDif(num);
-                         System.out.println("Enter defect time.");
-                         input = keySc.nextLine();
-                         num = Integer.parseInt(input);
-                         d.setTime(num);
-                         System.out.println("Enter defect likelyhood of recurrence.");
-                         input = keySc.nextLine();
-                         num = Integer.parseInt(input);
-                         d.setRec(num);
-                         t.defects.add(d);
-                         System.out.println("Enter x to quit.");
-                         input = keySc.nextLine();
-                     } while (!(input.equals("x")));
-                     myProject.backLogItems.add(t);
-                     System.out.println("Enter d to quit.");
-                     input = keySc.nextLine();
-                 } while (!(input.equals("d")));
-                 break;
-               case "d":
-                   System.out.println("Enter the item you would like to delete.");
-                   input = keySc.nextLine();
-                   num = Integer.parseInt(input);
-                   System.out.print(myProject.backLogItems.remove(num-1).toString());
-                   System.out.println("Has been removed");
-                 // code block
-                 break;
-               case "q":
-                   break;
-               default:
-                   System.out.println("Invalid input");
-                 // code block
-            }
-            
-        } while (!(input.equals("q")));
-        sc.close();
-        keySc.close();
+         myProject.edit();
        }
-    }
+	
+	public static void editProject(String p) throws IOException {
+		// repeatedly ask the Scrum master to print all backLog items
+        // or search for, edit, add or remove a backlog item
+		  Project myProject = new Project();
+		  myProject.load(p);
+		  myProject.edit();
+	}
+ }
  // features to be added:
  // integrate with javaFX
  // save project as text file

@@ -1,0 +1,104 @@
+Madden24
+5
+BackLog Item 1:
+Main Menu
+4
+2
+1
+Defect 1:
+Loss of Connection
+2
+4
+7
+BackLog Item 2:
+Franchise Mode
+9
+10
+1
+Defect 1:
+AI trade logic errors
+7
+4
+6
+BackLog Item 3:
+Ultimate Team
+6
+7
+1
+Defect 1:
+Hacking
+2
+8
+9
+BackLog Item 4:
+Exhibition
+3
+7
+1
+Defect 1:
+Keeper Logic
+3
+4
+4
+BackLog Item 5:
+The Yard
+7
+8
+1
+Defect 1:
+Server Crash
+3
+9
+8
+Madden24
+5
+BackLog Item 1:
+Main Menu
+4
+2
+1
+Defect 1:
+Loss of Connection
+2
+4
+7
+BackLog Item 2:
+Franchise Mode
+9
+10
+1
+Defect 1:
+AI trade logic errors
+7
+4
+6
+BackLog Item 3:
+Ultimate Team
+6
+7
+1
+Defect 1:
+Hacking
+2
+8
+9
+BackLog Item 4:
+Exhibition
+3
+7
+1
+Defect 1:
+Keeper Logic
+3
+4
+4
+BackLog Item 5:
+The Yard
+7
+9
+1
+Defect 1:
+Server Crash
+3
+9
+8
