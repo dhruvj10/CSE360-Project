@@ -22,6 +22,155 @@ public class Project {
 		name = "";
 		type = 0;
 		backLogItems = new ArrayList<BackLogItem>();
+		
+	}
+	
+	public void createProject() throws IOException {
+		// Initialize Variables
+        String line = "";
+        ArrayList<String> projectNameList = new ArrayList<String>();
+        ArrayList<Project> projectList = new ArrayList<Project>();
+        //ArrayList<Integer> order = new ArrayList<Integer>();
+        ArrayList<String> items = new ArrayList<String>();
+        Project com = new Project();
+        Project tempP;
+        BackLogItem item;
+        Defect def;
+        int numTypes = 0;
+        int numProjects = 0;
+        int numBL = 0;
+        int temp = 0;
+        int numDef = 0;
+        //String name = "";
+        String projectTypeName = "";
+        
+        //*****************************************
+        //Create Scanner object for file and terminal
+        File file = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\Prototype\\dataBase.txt");
+        Scanner sc = new Scanner(file);
+        Scanner keySc = new Scanner(System.in);
+        numTypes = sc.nextInt();
+        System.out.println("Which type of projects will you be creating?");
+        
+        //*******************************************************
+        // reads in number of types of projects and loops through file
+        // displaying each type, identified because they are
+        // the only lines that end in periods
+        
+        for (int i = 1; i <= numTypes; i++) {
+            while (!(line.contains("."))) { // skip ahead to next project
+                line = sc.nextLine();
+            }
+            line = sc.nextLine();
+            System.out.println(i + ". " + line);
+            projectNameList.add(line);
+            numProjects = sc.nextInt();
+        }
+        projectTypeName = keySc.nextLine();
+        numTypes = Integer.parseInt(projectTypeName) - 1;
+        projectTypeName = projectNameList.get(numTypes);
+        System.out.println("Ok, your project is a " + projectTypeName);
+        sc = new Scanner(file);
+        
+        //*********************************************************
+        // now starts at the top of the file again and starts at the beginning
+        // of the given project type
+        for (int j = 0; j <= numTypes; j++) {
+            while(!(line.contains("."))) {
+                line = sc.nextLine(); // go through until we get to the right type
+            }
+            line = sc.nextLine();
+        }
+        line = sc.nextLine();
+        numProjects = Integer.parseInt(line);
+        //*****************************************************
+        // for each project of the type we go through this for loop once and add it
+        // to our project list
+        for (int j = 0; j < numProjects; j++) { // save project
+            tempP = new Project();
+            line = sc.nextLine();
+            line = sc.nextLine();
+            // skip lines that we do not want to read in, Project x:
+            tempP.setName(line);
+            // set name of project
+            line = sc.nextLine();
+            numBL = Integer.parseInt(line);
+            projectList.add(tempP);
+            // loop through this list once for each backLog item
+            for (int i = 0; i < numBL; i++) {
+                line = sc.nextLine();
+                item = new BackLogItem();
+                line = sc.nextLine();
+                item.setName(line);
+                // line = sc.nextLine();
+                line = sc.nextLine();
+                temp = Integer.parseInt(line);
+                item.setTime(temp);
+                line = sc.nextLine();
+                temp = Integer.parseInt(line);
+                item.setDif(temp);
+                line = sc.nextLine();
+                numDef = Integer.parseInt(line);
+                //line = sc.nextLine(); // skip Defect 1:
+                tempP.backLogItems.add(item);
+                // add backLog item to project
+                // go through this loop once for every defect
+                for (int k = 0; k < numDef; k++) {
+                    line = sc.nextLine();
+                    def = new Defect();
+                    line = sc.nextLine();
+                    def.setName(line);
+                    line = sc.nextLine();
+                    temp = Integer.parseInt(line);
+                    def.setTime(temp);
+                    line = sc.nextLine();
+                    temp = Integer.parseInt(line);
+                    def.setDif(temp);
+                    line = sc.nextLine();
+                    temp = Integer.parseInt(line);
+                    def.setRec(temp);
+                    item.defects.add(def);
+                    //line = sc.nextLine(); // make sure it skips over "defect 1:"
+                }
+            }
+        }
+        
+
+        for (int i = 0; i < projectList.size(); i++) {
+            // add all backLog Items from ith project into temp
+            com.backLogItems.addAll(projectList.get(i).backLogItems);
+            for (int j = 0; j < projectList.get(i).backLogItems.size(); j++) {
+                if (items.contains(projectList.get(i).backLogItems.get(j).getName())) {
+                    //com.combineItems(projectList.get(i).backLogItems.get(j), com.backLogItems.get(items.indexOf(projectList.get(i).backLogItems.get(j).getName())), 1);
+                }
+                else {
+                    items.add(projectList.get(i).backLogItems.get(j).getName());
+                }
+                
+            }
+        }
+        
+        ArrayList<BackLogItem> duplicates;
+        for (int i = 0; i < items.size(); i++) {
+            duplicates = new ArrayList<BackLogItem>();
+            for (int j = 0; j < com.backLogItems.size(); j++) {
+                if (com.backLogItems.get(j).getName().equals(items.get(i))) {
+                    duplicates.add(com.backLogItems.get(j));
+                }
+            }
+            com.combineItems(duplicates);
+        }
+        
+        // create your project based on historical data
+        System.out.println("Please enter your project's name: ");
+        line = keySc.nextLine();
+        this.setName(line);
+        
+        this.backLogItems.addAll(com.backLogItems);
+        
+        // repeatedly ask the Scrum master to print all backLog items
+        // or search for, edit, add or remove a backlog item
+        this.edit();
 	}
 	
 	public Project(String n, int t) {
@@ -131,7 +280,7 @@ public class Project {
 	                           System.out.println("Enter new difficulty.");
 	                           input = keySc.nextLine();
 	                           num = Integer.parseInt(input);
-	                           backLogItems.get(num).defects.get(i).setDif(num);
+	                           backLogItems.get(index).defects.get(i).setDif(num);
 	                       }
 	                       
 	                       System.out.println("Enter 1 to change the time or 0 to leave it.");
@@ -215,7 +364,7 @@ public class Project {
 	        }
 	        
 	    } while (!(input.equals("q")));
-	    System.out.println("Would you like to save your project? (0 for no, 1 for yes");
+	    System.out.println("Would you like to save your project? (0 for no, 1 for yes)");
 	    String save;
 	    save = keySc.nextLine();
 	    if (save.equals("1")) {
@@ -233,11 +382,38 @@ public class Project {
 		File f = new File(p);
 		Scanner fS = new Scanner(f);
 		Project mP = new Project();
+		Scanner kS = new Scanner(System.in);
 		backLogItems.clear();
+		ArrayList<String> projectNameList = new ArrayList<String>();
+		System.out.println("Which project would you like to load?");
+        //*****************************
+		//Each file may have multiple projects, pick one
+		//******************************
+		int count = 1;
+		String line = "";
+        while (fS.hasNextLine()) {
+            while ((fS.hasNextLine()) && !(line.contains("."))) { // skip ahead to next project
+            	line = fS.nextLine();
+            }
+            if (fS.hasNextLine()) {
+            	line = fS.nextLine();
+                System.out.println(count + ". " + line);
+                count++;
+                projectNameList.add(line);
+            }
+        }
+        int num = 0;
+        num = Integer.parseInt(kS.nextLine());
+        String pName = "";
+        pName = projectNameList.get(num-1);
+        fS = new Scanner(f);
+        while (!(line.equals(pName))) {
+        	line = fS.nextLine();
+        }
 		String in = "";
 		int inNum = -1;
-		in = fS.nextLine();
-		setName(in);
+		//in = fS.nextLine();
+		setName(line);
 		in = fS.nextLine();
 		inNum = Integer.parseInt(in);
 		int numbL = inNum;
@@ -274,7 +450,7 @@ public class Project {
 			backLogItems.add(bL);
 		}
 		
-		
+		fS.close();
 		return this;
 	}
 	
@@ -284,10 +460,47 @@ public class Project {
 	public void save() throws IOException {
 		System.out.println("Please enter the path you would like to save to.");
 		Scanner s = new Scanner(System.in);
+		
 		String path = s.nextLine();
+		System.out.println("Would you like:");
+		System.out.println("1. Write over file");
+		System.out.println("2. Add to file");
+		int op = Integer.parseInt(s.nextLine());
+		boolean append = true;
+		
+		if (op == 1) {
+			append = false;
+		}
 		File myProject = new File(path);
-        BufferedWriter brw = new BufferedWriter(new FileWriter(myProject, true));
+		StringBuffer  sB = new StringBuffer();
+		Scanner sc = new Scanner(myProject);
+        BufferedWriter brw = new BufferedWriter(new FileWriter(myProject, append));
         
+        //Reading lines of the file and appending them to StringBuffer
+        String line = "";
+        String pName = "";
+        /*while (sc.hasNextLine()) {
+        	if (!(this.name.equals(pName))) {
+        		sB.append(sc.nextLine()+System.lineSeparator());
+        	}
+        	//line = sc.nextLine();
+        	if (line.equals(name)) {
+        		pName = line;
+        	}
+        }
+        while ((sc.hasNextLine()) && ((line = sc.nextLine()) != ".")) {
+        	// do nothing
+        }
+        while (sc.hasNextLine()) {
+        	sB.append(sc.nextLine()+System.lineSeparator());
+        }
+        String fileContents = sB.toString();
+        
+        sc.close();
+        brw.write(fileContents);
+        brw.flush();*/
+        brw.write("."+System.lineSeparator());
+        brw.flush();
         brw.write(name + System.lineSeparator());
         brw.flush();
         brw.write(backLogItems.size() + System.lineSeparator());
@@ -316,9 +529,6 @@ public class Project {
             	brw.flush();
         	}
         }
-        System.out.println("Project saved succesfully");
-        brw.close();
-        
 		
 	}
 	
