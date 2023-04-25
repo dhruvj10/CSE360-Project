@@ -11,6 +11,10 @@ import javafx.geometry.HPos;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class Main extends Application{
 	
@@ -34,6 +38,7 @@ public static void main(String[] args) {
 	Tab mainTab = new Tab();					
 	Tab defectTab = new Tab();
 	Tab effortLogEditorTab = new Tab();
+	Tab backlogTab = new Tab();
     Scene scene = new Scene(tabPane);
 	Stage primaryStage = new Stage();
 	GridPane pane = new GridPane();
@@ -48,6 +53,23 @@ public static void main(String[] args) {
 	Label effortCatLabel = new Label("Effort Category:");
 	Button clockOutBtn = new Button("Clock out");
 	Button mainSubmitBtn = new Button("Submit");
+	GridPane backlogPane = new GridPane();
+	RadioButton existingProj = new RadioButton("Existing Project");
+	RadioButton newProj = new RadioButton("New Project");
+	ToggleGroup projectOptions = new ToggleGroup();
+	Button enterbtn = new Button("Enter");
+	TextArea toDisplay = new TextArea();
+	String projName;
+	int difficulty, defects, time;
+	TextField projNameFld = new TextField();
+	TextField difficultyFld = new TextField();
+	TextField defectsFld = new TextField();
+	TextField timeFld = new TextField();
+	Button newProjBtn = new Button("Create Project");
+	Label projNameLbl = new Label("Project Name: ");
+	Label projDiffLbl = new Label("Project Difficulty Level: ");
+	Label projDefectsLbl = new Label("Project Defects: ");
+	Label projTimeLbl = new Label("Time (in hours): ");
 	
 	//****** START OF MAIN TAB FEATURES ********************************
 	public void start(Stage primaryStage){
@@ -114,8 +136,10 @@ public static void main(String[] args) {
 		defectTab.setContent(defectsPane);
 		effortLogEditorTab.setText("Effort Log Editor");
 		effortLogEditorTab.setContent(effortLogEditor);
+		backlogTab.setText("Backlog Items Catalog");
+		backlogTab.setContent(backlogPane);
 		tabPane.getSelectionModel().select(0);				//add the tabs to the pane
-        tabPane.getTabs().addAll(mainTab, defectTab, effortLogEditorTab);
+        tabPane.getTabs().addAll(mainTab, backlogTab, defectTab, effortLogEditorTab);
 		Scene userAuthScene = new Scene(userAuthPane);
 
         //**************************END OF CONNECTING PANES CODE ****************
@@ -146,13 +170,17 @@ public static void main(String[] args) {
         //*****************END OF AUTHENTICATION PANE CODE ************
 		
 		
-		//*****************START OF DEFECTS PANE CODE ***********************
+		//*****************START OF BACKLOG PANE CODE ***********************
+		existingProj.setToggleGroup(projectOptions);
+		newProj.setToggleGroup(projectOptions);
+		backlogPane.add(existingProj, 2, 2);
+		backlogPane.add(newProj, 2, 3);
+		backlogPane.add(enterbtn, 2, 4);
+		enterbtn.setOnAction(new enterBtnHandler());
+		toDisplay.setEditable(false);
 		
 		
-		
-		
-		
-		//****************END OF DEFECTS PANE CODE *************************
+		//****************END OF BACKLOG PANE CODE *************************
 	}
 	
 	//**********************Button Handling intensifies************************
@@ -190,12 +218,44 @@ public static void main(String[] args) {
 			public void handle(ActionEvent e) {
 				Label submission = new Label("Submitted.");
 				pane.add(submission, 2, 8);
-				ProjectList.getItems().clear();
-				LifeCycleList.getItems().clear();
-				EffortCat.getItems().clear();
-				EffortCat2.getItems().clear();
+				ProjectList.getSelectionModel().clearSelection();
+				LifeCycleList.getSelectionModel().clearSelection();
+				EffortCat.getSelectionModel().clearSelection();
+				EffortCat2.getSelectionModel().clearSelection();
 				//BEN: if we do want to actually make a submitable form, i can set it so before it 
 				//clears the boxes, the choices get set to variables, or we can just leave it as is to make it seem like working
+			}
+		}
+		private class enterBtnHandler implements EventHandler<ActionEvent>{
+			public void handle(ActionEvent e) {
+				//BEN: this would be the spot to have methods producing strings to 
+				//output text based on what options your backlog program uses, the .setText takes a string parameter 
+				//and displays it
+				if(existingProj.isSelected()) {
+					backlogPane.add(toDisplay, 2, 5);
+					toDisplay.setText("existing");
+				}
+				else if(newProj.isSelected()) {
+					backlogPane.add(projNameLbl, 2, 5);
+					backlogPane.add(projDiffLbl, 2, 6);
+					backlogPane.add(projDefectsLbl, 2, 7);
+					backlogPane.add(projTimeLbl, 2, 8);
+					backlogPane.add(projNameFld, 3, 5);
+					backlogPane.add(difficultyFld, 3, 6);
+					backlogPane.add(defectsFld, 3, 7);
+					backlogPane.add(timeFld, 3, 8);
+					backlogPane.add(newProjBtn, 3, 9);
+					newProjBtn.setOnAction(new newProjBtnHandler());
+				}
+			}
+		}
+		private class newProjBtnHandler implements EventHandler<ActionEvent>{
+			public void handle(ActionEvent e) {
+				projName = projNameFld.getText();
+				difficulty = Integer.parseInt(difficultyFld.getText());
+				defects = Integer.parseInt(defectsFld.getText());
+				time = Integer.parseInt(timeFld.getText());
+				
 			}
 		}
 }
