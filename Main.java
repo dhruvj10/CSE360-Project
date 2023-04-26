@@ -1,5 +1,11 @@
 package application;
 	
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -198,11 +204,37 @@ public static void main(String[] args) {
 			}
 		}	
 		private class AuthenticateBtnHandler implements EventHandler<ActionEvent>{
+			private static boolean authenticate(String username, String password) throws IOException {
+				File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\application\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+		        BufferedReader br = new BufferedReader(new FileReader(UserData));
+		        Scanner scanner = new Scanner(UserData);
+		        Scanner input = new Scanner(System.in);
+		        try {
+		            String line;
+		            while ((line = br.readLine()) != null) {
+		                // process the line
+		                if(username.equals(line)){
+		                    if(password.equals(br.readLine())) {
+		                    	return true;
+		                    }
+		                }
+		            }
+
+		        } finally {}
+				
+				return false;
+			}
 			public void handle(ActionEvent e) {
 		    	username = usernameTxtFld.getText();
 		    	password = passwordTxtFld.getText();
 		    	boolean validUser = true;
 		    	//BEN: tie in the method that checks for if a user is valid to this boolean, and have it set the validUser to true or false
+		    	try {
+					validUser = authenticate(username, password);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		    	if (validUser) {							//if user is valid, go to system screen
 		    		primaryStage.setScene(scene);
 		    		primaryStage.show();
@@ -214,6 +246,7 @@ public static void main(String[] args) {
 		    	}
 			}
 		}
+		
 		private class SubmitBtnMainHandler implements EventHandler<ActionEvent>{
 			public void handle(ActionEvent e) {
 				Label submission = new Label("Submitted.");
