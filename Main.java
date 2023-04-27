@@ -280,12 +280,12 @@ public static void populate(String p, ArrayList<Project> pL) throws IOException 
 		//****************END OF BACKLOG PANE CODE *************************
 		
 		//*****************START OF Defect PANE CODE ***********************
-				DefectsPane.add(defectLabel, 0, 5);				//add to pane and set position
+				/*DefectsPane.add(defectLabel, 0, 5);				//add to pane and set position
 				for (int i = 0; i < curP.backLogItems.size(); i++) {
 					Defect.getItems().add(curP.backLogItems.get(i).getName());
 				}
 				backlogPane.add(BackLogItem, 1, 5);			//add to pane and set position
-				BackLogItem.setOnAction(new backlogComboHandler());
+				BackLogItem.setOnAction(new backlogComboHandler());*/
 				
 				/*existingProj.setToggleGroup(projectOptions);
 				newProj.setToggleGroup(projectOptions);
