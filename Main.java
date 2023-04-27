@@ -387,6 +387,12 @@ public static void populate(String p, ArrayList<Project> pL) throws IOException 
 					}
 					
 				}
+				try {
+					ListOfProjects.get(0).makeReport("C:\\Users\\benja\\Documents\\report.txt");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 		

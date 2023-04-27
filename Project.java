@@ -4,7 +4,6 @@ import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +29,16 @@ public class Project {
 		type = 0;
 		backLogItems = new ArrayList<BackLogItem>();
 		load("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt", num);
+	}
+	
+	public void makeReport(String path) throws IOException {
+		File myProject = new File(path);
+        BufferedWriter br = new BufferedWriter(new FileWriter(myProject, false));
+        String out = toString();
+        br.write(out + System.lineSeparator());
+        br.flush();
+        br.close();
+        
 	}
 	
 	public void createProject() throws IOException {
@@ -481,8 +490,8 @@ public class Project {
 			append = false;
 		}*/
 		File myProject = new File(path);
-		StringBuffer  sB = new StringBuffer();
-		Scanner sc = new Scanner(myProject);
+		//StringBuffer  sB = new StringBuffer();
+		//Scanner sc = new Scanner(myProject);
         BufferedWriter brw = new BufferedWriter(new FileWriter(myProject, append));
         
         //Reading lines of the file and appending them to StringBuffer
@@ -538,6 +547,7 @@ public class Project {
             	brw.flush();
         	}
         }
+        brw.close();
 		
 	}
 	
