@@ -102,7 +102,7 @@ import java.util.Scanner;*/
                         	//*************************
                         	// Sets project to what was saved in the file and allows you to view/edit
                         	//*************************
-                        	myP.load(path);
+                        	myP.load(path, 0);
                         	myP.edit();
                         }
                         else {
@@ -154,7 +154,7 @@ public static void createProject() throws IOException {
 		// repeatedly ask the Scrum master to print all backLog items
         // or search for, edit, add or remove a backlog item
 		  Project myProject = new Project();
-		  myProject.load(p);
+		  myProject.load(p, 0);
 		  myProject.edit();
 	}
  }

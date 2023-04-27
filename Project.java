@@ -25,6 +25,13 @@ public class Project {
 		
 	}
 	
+	public Project(int num) throws IOException {
+		name = "";
+		type = 0;
+		backLogItems = new ArrayList<BackLogItem>();
+		load("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt", num);
+	}
+	
 	public void createProject() throws IOException {
 		// Initialize Variables
         String line = "";
@@ -46,7 +53,7 @@ public class Project {
         
         //*****************************************
         //Create Scanner object for file and terminal
-        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\dataBase.txt");
+        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
         Scanner sc = new Scanner(file);
         Scanner keySc = new Scanner(System.in);
         numTypes = sc.nextInt();
@@ -368,7 +375,7 @@ public class Project {
 	    String save;
 	    save = keySc.nextLine();
 	    if (save.equals("1")) {
-	    	save();
+	    	//save(false, path);
 	    }
 	    //sc.close();
 	    keySc.close();
@@ -378,7 +385,7 @@ public class Project {
 	//Reads in from text file at given path and initializes this project with that info
 	//***********************************************
 	
-	public Project load(String p) throws IOException {
+	public Project load(String p, int num) throws IOException {
 		File f = new File(p);
 		Scanner fS = new Scanner(f);
 		Project mP = new Project();
@@ -386,12 +393,11 @@ public class Project {
 		backLogItems.clear();
 		ArrayList<String> projectNameList = new ArrayList<String>();
 		//System.out.println("Which project would you like to load?");
-		
 		//FIXME make graphics
         //*****************************
 		//Each file may have multiple projects, pick one
 		//******************************
-		int count = 1;
+		int count = 0;
 		String line = "";
         while (fS.hasNextLine()) {
             while ((fS.hasNextLine()) && !(line.contains("."))) { // skip ahead to next project
@@ -404,7 +410,7 @@ public class Project {
                 projectNameList.add(line);
             }
         }
-        int num = 1;
+        //int num = 1;
         //num = Integer.parseInt(kS.nextLine());
         String pName = "";
         pName = projectNameList.get(num-1);
@@ -459,20 +465,21 @@ public class Project {
 	//*****************************************
 	// Writes the project to a text file at a given path
 	//****************************************
-	public void save() throws IOException {
-		System.out.println("Please enter the path you would like to save to.");
+	public void save(boolean append, String path) throws IOException {
+		/*System.out.println("Please enter the path you would like to save to.");
 		Scanner s = new Scanner(System.in);
 		
 		String path = s.nextLine();
 		System.out.println("Would you like:");
 		System.out.println("1. Write over file");
 		System.out.println("2. Add to file");
-		int op = Integer.parseInt(s.nextLine());
-		boolean append = true;
+		int op = Integer.parseInt(s.nextLine());*/
+		//int op = 1;
+		// have append false for first one and then true
 		
-		if (op == 1) {
+		/*if (op == 1) {
 			append = false;
-		}
+		}*/
 		File myProject = new File(path);
 		StringBuffer  sB = new StringBuffer();
 		Scanner sc = new Scanner(myProject);

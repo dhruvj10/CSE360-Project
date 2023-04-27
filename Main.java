@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -24,10 +25,37 @@ public static void main(String[] args) {
         launch(args);
 }
 
+/*********************************************************
+Puts list of projects in textfile into arrayList of projects
+ * @throws IOException 
+ **********************************************************/
+public static void populate(String p, ArrayList<Project> pL) throws IOException {
+	int count = 0;
+	File file = new File(p);
+    Scanner sc = new Scanner(file);
+    String line = "";
+    while (sc.hasNextLine()) {
+    	line = sc.nextLine();
+    	if (line.equals(".")) {
+    		count++;
+    	}
+    }
+    Project pr;
+	for (int i = 1; i <= count; i++) {
+		pr = new Project(i);
+		pL.add(pr);
+	}
+	
+	return;
+}
 
 	//****** Declarations of items in full scope ********************************
-	Project p;
-	String path = "";
+	Project curP;
+	int pI = 0;
+	BackLogItem curBl;
+	int bLI = 0;
+	ArrayList<Project> ListOfProjects = new ArrayList<Project>();
+	String path = "C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt";
 	final int win_x_size = 500, win_y_size = 200;
 	Label timePunch = new Label("You are not clocked in");
     String username;				
@@ -47,12 +75,16 @@ public static void main(String[] args) {
 	Stage primaryStage = new Stage();
 	GridPane pane = new GridPane();
 	ComboBox<String> ProjectList = new ComboBox<String>();	
+	ComboBox<String> BackLogItem = new ComboBox<String>();
+	ComboBox<String> Defect = new ComboBox<String>();
 	ComboBox<String> LifeCycleList = new ComboBox<String>();
 	ComboBox<String> EffortCat = new ComboBox<String>();
 	ComboBox<String> EffortCat2 = new ComboBox<String>();
 	Label header = new Label("Effort Logger Console");
 	Button clockInBtn = new Button("Clock In");	
-	Label projLabel = new Label("Project:");
+	Label projLabel = new Label("Project: ");
+	Label backlogLabel = new Label("BackLogItem: ");
+	Label defectLabel = new Label("Defect: ");
 	Label lifeCycleLabel = new Label("Life Cycle Step:");
 	Label effortCatLabel = new Label("Effort Category:");
 	Button clockOutBtn = new Button("Clock out");
@@ -108,7 +140,10 @@ public static void main(String[] args) {
 	Defect d;
 	
 	//****** START OF MAIN TAB FEATURES ********************************
-	public void start(Stage primaryStage){
+	public void start(Stage primaryStage) throws IOException{
+		populate(path, ListOfProjects);
+		curP = ListOfProjects.get(0);
+		curBl = curP.backLogItems.get(0);
 		// Create a GridPane object and set its properties
 		pane.setAlignment(Pos.CENTER); //center the GridPane
 		pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -126,12 +161,21 @@ public static void main(String[] args) {
 		pane.add(clockInBtn, 1, 1);						//add to pane and set position
 		clockInBtn.setOnAction(new InButtonHandler());	//tie button to an event handler
 		
+		/************************************
+		 populate drop down menu with list of projects
+		 *************************************/
+		
 		pane.add(projLabel, 0, 5);				//add to pane and set position
-		ProjectList.getItems().addAll(
+		/*ProjectList.getItems().addAll(
 				"project1",
 				"project2",
-				"project3");
+				"project3");*/
+		for (int i = 0; i < ListOfProjects.size(); i++) {
+			ProjectList.getItems().add(ListOfProjects.get(i).getName());
+		}
+		ProjectList.getSelectionModel().select(0);
 		pane.add(ProjectList, 1, 5);			//add to pane and set position
+		ProjectList.setOnAction(new projectComboHandler());
 		
 		pane.add(lifeCycleLabel, 2, 5);			//add to pane and set position
 		GridPane.setHalignment(lifeCycleLabel, HPos.RIGHT);			//set alignment for more visually pleasing
@@ -207,16 +251,54 @@ public static void main(String[] args) {
 		
 		
 		//*****************START OF BACKLOG PANE CODE ***********************
-		existingProj.setToggleGroup(projectOptions);
+		backlogPane.add(backlogLabel, 0, 5);				//add to pane and set position
+		for (int i = 0; i < curP.backLogItems.size(); i++) {
+			BackLogItem.getItems().add(curP.backLogItems.get(i).getName());
+		}
+		ProjectList.getSelectionModel().select(0);
+		backlogPane.add(BackLogItem, 1, 5);			//add to pane and set position
+		BackLogItem.setOnAction(new backlogComboHandler());
+		
+		bLDifTF = new TextField("" + curBl.getDif());
+		bLTimeTF = new TextField("" + curBl.getTime());
+		bLDifTF.setOnAction(new backLogTextFieldHandler());
+		bLTimeTF.setOnAction(new backLogTextFieldHandler());
+		
+		backlogPane.add(bLDifLbl, 2, 5);
+		backlogPane.add(bLDifTF, 2, 6);
+		backlogPane.add(bLTimeLbl, 3, 5);
+		backlogPane.add(bLTimeTF, 3, 6);
+		/*existingProj.setToggleGroup(projectOptions);
 		newProj.setToggleGroup(projectOptions);
 		backlogPane.add(existingProj, 2, 2);
 		backlogPane.add(newProj, 2, 3);
 		backlogPane.add(enterbtn, 2, 4);
 		enterbtn.setOnAction(new enterBtnHandler());
-		toDisplay.setEditable(false);
+		toDisplay.setEditable(false);*/
 		
 		
 		//****************END OF BACKLOG PANE CODE *************************
+		
+		//*****************START OF Defect PANE CODE ***********************
+				DefectsPane.add(defectLabel, 0, 5);				//add to pane and set position
+				for (int i = 0; i < curP.backLogItems.size(); i++) {
+					Defect.getItems().add(curP.backLogItems.get(i).getName());
+				}
+				backlogPane.add(BackLogItem, 1, 5);			//add to pane and set position
+				BackLogItem.setOnAction(new backlogComboHandler());
+				
+				/*existingProj.setToggleGroup(projectOptions);
+				newProj.setToggleGroup(projectOptions);
+				backlogPane.add(existingProj, 2, 2);
+				backlogPane.add(newProj, 2, 3);
+				backlogPane.add(enterbtn, 2, 4);
+				enterbtn.setOnAction(new enterBtnHandler());
+				toDisplay.setEditable(false);*/
+				
+				
+				//****************END OF Defect PANE CODE *************************
+		
+		
 	}
 	
 	//**********************Button Handling intensifies************************
@@ -235,7 +317,7 @@ public static void main(String[] args) {
 		}	
 		private class AuthenticateBtnHandler implements EventHandler<ActionEvent>{
 			private static boolean authenticate(String username, String password) throws IOException {
-				File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+				File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
 		        BufferedReader br = new BufferedReader(new FileReader(UserData));
 		        Scanner scanner = new Scanner(UserData);
 		        Scanner input = new Scanner(System.in);
@@ -281,16 +363,62 @@ public static void main(String[] args) {
 			public void handle(ActionEvent e) {
 				Label submission = new Label("Submitted.");
 				pane.add(submission, 2, 8);
-				ProjectList.getSelectionModel().clearSelection();
+				/*ProjectList.getSelectionModel().clearSelection();
 				LifeCycleList.getSelectionModel().clearSelection();
 				EffortCat.getSelectionModel().clearSelection();
-				EffortCat2.getSelectionModel().clearSelection();
+				EffortCat2.getSelectionModel().clearSelection();*/
+				
 				//BEN: if we do want to actually make a submitable form, i can set it so before it 
 				//clears the boxes, the choices get set to variables, or we can just leave it as is to make it seem like working
-				
+				/*******************************
+				 Save Project(s)
+				 */
+				for (int i = 0; i < ListOfProjects.size(); i++) {
+					try {
+						if (i == 0) {
+							ListOfProjects.get(i).save(false, path);
+						}
+						else {
+							ListOfProjects.get(i).save(true, path);
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
 			}
 		}
-		private class enterBtnHandler implements EventHandler<ActionEvent>{
+		
+		private class projectComboHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				pI = ProjectList.getSelectionModel().getSelectedIndex();
+				curP = new Project();
+				curP = ListOfProjects.get(pI);
+				/*********************
+				 Populate backLogItem list
+				 */
+				BackLogItem.getItems().clear();
+				for (int i = 0; i < curP.backLogItems.size(); i++) {
+					BackLogItem.getItems().add(curP.backLogItems.get(i).getName());
+				}
+			}
+		}
+		
+		private class backlogComboHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				bLI = BackLogItem.getSelectionModel().getSelectedIndex();
+				curBl = new BackLogItem();
+				curBl = curP.backLogItems.get(bLI);
+				bLDifTF.setText(curBl.getDif() + "");
+				bLTimeTF.setText(curBl.getTime() + "");
+				/*********************
+				 Populate defect list
+				 */
+			}
+		}
+		
+		private class enterBtnHandler implements EventHandler<ActionEvent> {
 			public void handle(ActionEvent e) {
 				//BEN: this would be the spot to have methods producing strings to 
 				//output text based on what options your backlog program uses, the .setText takes a string parameter 
@@ -305,16 +433,16 @@ public static void main(String[] args) {
 					//pathTF.setOnAction(new backLogTextFieldHandler());
 					//backlogPane.add(pathTF, 3, 5);
 					//String path = pathTF.getText();
-					path = "C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt";
-					p = new Project();
+					/*path = "C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt";
+					Project p = new Project();
 					try {
-						p.load(path);
+						p.load(path, 0);
 						
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-					int y = 5;
+					}*/
+					/*int y = 5;
 					int x = 2;
 					for (int i = 0; i < p.backLogItems.size(); i++) {
 						bL = p.backLogItems.get(i);
@@ -366,23 +494,40 @@ public static void main(String[] args) {
 							y++;
 						}
 						x -= 2;
-					}
+					}*/
 				}
 				else if(newProj.isSelected()) {
-					backlogPane.add(projNameLbl, 2, 5);
-					//backlogPane.add(projDiffLbl, 2, 6);
-					//backlogPane.add(projDefectsLbl, 2, 7);
-					//backlogPane.add(projTimeLbl, 2, 8);
+					/*backlogPane.add(projNameLbl, 2, 5);
+					backlogPane.add(projDiffLbl, 2, 6);
+					backlogPane.add(projDefectsLbl, 2, 7);
+					backlogPane.add(projTimeLbl, 2, 8);
 					backlogPane.add(projNameFld, 3, 5);
-					/*for () {
+					for () {
 						
-					}*/
-					//backlogPane.add(difficultyFld, 3, 6);
-					//backlogPane.add(defectsFld, 3, 7);
-					//backlogPane.add(timeFld, 3, 8);
+					}
+					backlogPane.add(difficultyFld, 3, 6);
+					backlogPane.add(defectsFld, 3, 7);
+					backlogPane.add(timeFld, 3, 8);
 					backlogPane.add(newProjBtn, 3, 9);
-					newProjBtn.setOnAction(new newProjBtnHandler());
+					newProjBtn.setOnAction(new newProjBtnHandler());*/
 				}
+				/*******************************
+				 Save Project(s)
+				 */
+				/*for (int i = 0; i < ListOfProjects.size(); i++) {
+					try {
+						if (i == 0) {
+							ListOfProjects.get(i).save(false, path);
+						}
+						else {
+							ListOfProjects.get(i).save(true, path);
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}*/
 			}
 		}
 		
@@ -390,16 +535,19 @@ public static void main(String[] args) {
 			
 			public void handle(ActionEvent e) {
 				if (e.getSource().equals(blNameTF)) {
-					bL.setName(((TextField)e.getSource()).getText());
+					curBl.setName(blNameTF.getText().toString());
+					curP.backLogItems.get(bLI).setName(curBl.getName());
 				}
 				else if (e.getSource().equals(bLTimeTF)) {
-					bL.setTime(Integer.parseInt(((TextField)e.getSource()).getText()));
+					curBl.setTime(Integer.parseInt(bLTimeTF.getText().toString()));
+					curP.backLogItems.get(bLI).setDif(Integer.parseInt(bLTimeTF.getText().toString()));
 				}
 				else if (e.getSource().equals(bLDifTF)) {
-					bL.setDif(Integer.parseInt(((TextField)e.getSource()).getText()));
+					curBl.setDif(Integer.parseInt(bLDifTF.getText().toString()));
+					curP.backLogItems.get(bLI).setDif(Integer.parseInt(bLDifTF.getText().toString()));
 				}
 				else if (e.getSource().equals(pathTF)) {
-					path = pathTF.getText();
+					path = pathTF.getText().toString();
 				}
 				
 			}
@@ -415,12 +563,8 @@ public static void main(String[] args) {
 				Project p = new Project(); // FIXME: must also take in backlog items
 				p.setName(projName);
 				
-				try {
-					p.save();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				ListOfProjects.add(p);
+				
 				
 			}
 		}
