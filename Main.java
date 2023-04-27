@@ -17,10 +17,6 @@ import javafx.geometry.HPos;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 public class Main extends Application{
 	
@@ -30,6 +26,8 @@ public static void main(String[] args) {
 
 
 	//****** Declarations of items in full scope ********************************
+	Project p;
+	String path = "";
 	final int win_x_size = 500, win_y_size = 200;
 	Label timePunch = new Label("You are not clocked in");
     String username;				
@@ -71,11 +69,43 @@ public static void main(String[] args) {
 	TextField difficultyFld = new TextField();
 	TextField defectsFld = new TextField();
 	TextField timeFld = new TextField();
+	/*****************************
+	BackLog Items textFields and Labels
+	//****************************/
+	TextField bLDifTF;
+	TextField bLTimeTF;
+	TextField blNameTF;
+	
+	Label bLTimeLbl = new Label("Time (in hours): ");
+	Label bLNameLbl = new Label("BackLog Item Name: ");
+	Label bLDifLbl = new Label("Difficulty Level (/10): ");
+	
+	/*****************************
+	Defect textFields and Labels
+	//****************************/
+	TextField dDifTF;
+	TextField dTimeTF;
+	TextField dRecTF;
+	TextField dNameTF;
+	
+	Label dTimeLbl = new Label("Time (in hours): ");
+	Label dNameLbl = new Label("Defect Name: ");
+	Label dDifLbl = new Label("Difficulty Level (/10): ");
+	Label dRecLbl = new Label("Likelyhood of recurrence: ");
+	
+	
 	Button newProjBtn = new Button("Create Project");
 	Label projNameLbl = new Label("Project Name: ");
 	Label projDiffLbl = new Label("Project Difficulty Level: ");
 	Label projDefectsLbl = new Label("Project Defects: ");
+	Label bLNumDefectsLbl = new Label("Project number of Defects: ");
 	Label projTimeLbl = new Label("Time (in hours): ");
+	// getting path
+	TextField pathTF = new TextField();
+	Label pathLbl = new Label("Please enter the path: ");
+	// temps
+	BackLogItem bL;
+	Defect d;
 	
 	//****** START OF MAIN TAB FEATURES ********************************
 	public void start(Stage primaryStage){
@@ -205,7 +235,7 @@ public static void main(String[] args) {
 		}	
 		private class AuthenticateBtnHandler implements EventHandler<ActionEvent>{
 			private static boolean authenticate(String username, String password) throws IOException {
-				File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\application\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+				File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
 		        BufferedReader br = new BufferedReader(new FileReader(UserData));
 		        Scanner scanner = new Scanner(UserData);
 		        Scanner input = new Scanner(System.in);
@@ -228,7 +258,7 @@ public static void main(String[] args) {
 		    	username = usernameTxtFld.getText();
 		    	password = passwordTxtFld.getText();
 		    	boolean validUser = true;
-		    	//BEN: tie in the method that checks for if a user is valid to this boolean, and have it set the validUser to true or false
+		    	//ANDREW: added validation
 		    	try {
 					validUser = authenticate(username, password);
 				} catch (IOException e1) {
@@ -257,6 +287,7 @@ public static void main(String[] args) {
 				EffortCat2.getSelectionModel().clearSelection();
 				//BEN: if we do want to actually make a submitable form, i can set it so before it 
 				//clears the boxes, the choices get set to variables, or we can just leave it as is to make it seem like working
+				
 			}
 		}
 		private class enterBtnHandler implements EventHandler<ActionEvent>{
@@ -265,29 +296,131 @@ public static void main(String[] args) {
 				//output text based on what options your backlog program uses, the .setText takes a string parameter 
 				//and displays it
 				if(existingProj.isSelected()) {
-					backlogPane.add(toDisplay, 2, 5);
-					toDisplay.setText("existing");
+					//backlogPane.add(toDisplay, 2, 5);
+					//toDisplay.setText("existing");
+					/******************************
+					Load Existing project
+					//*********************************/
+					//backlogPane.add(pathLbl, 2, 5);
+					//pathTF.setOnAction(new backLogTextFieldHandler());
+					//backlogPane.add(pathTF, 3, 5);
+					//String path = pathTF.getText();
+					path = "C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt";
+					p = new Project();
+					try {
+						p.load(path);
+						
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					int y = 5;
+					int x = 2;
+					for (int i = 0; i < p.backLogItems.size(); i++) {
+						bL = p.backLogItems.get(i);
+						Label lbl = new Label("Back Log Item " + i+1);
+						backlogPane.add(lbl, x, y);
+						y++;
+						backlogPane.add(bLNameLbl, x, y);
+						blNameTF = new TextField(p.backLogItems.get(i).getName());
+						blNameTF.setOnAction(new backLogTextFieldHandler());
+						backlogPane.add(blNameTF, x+1, y);
+						y++;
+						// Dif
+						backlogPane.add(bLDifLbl, x, y);
+						bLDifTF = new TextField("" + p.backLogItems.get(i).getDif());
+						bLDifTF.setOnAction(new backLogTextFieldHandler());
+						backlogPane.add(bLDifTF, x+1, y);
+						y++;
+						backlogPane.add(bLTimeLbl, x, y);
+						bLTimeTF = new TextField("" + p.backLogItems.get(i).getTime());
+						bLTimeTF.setOnAction(new backLogTextFieldHandler());
+						backlogPane.add(bLTimeTF, x+1, y);
+						y++;
+						x += 2;
+						for (int j = 0; j < p.backLogItems.get(i).defects.size(); j++) {
+							d = p.backLogItems.get(i).defects.get(j);
+							Label lbl1 = new Label("Defect " + j+1);
+							backlogPane.add(lbl1, x, y);
+							y++;
+							backlogPane.add(dNameLbl, x, y);
+							dNameTF = new TextField(p.backLogItems.get(i).defects.get(j).getName());
+							dNameTF.setOnAction(new backLogTextFieldHandler());
+							backlogPane.add(dNameTF, x+1, y);
+							y++;
+							// Dif
+							backlogPane.add(dDifLbl, x, y);
+							dDifTF = new TextField("" + p.backLogItems.get(i).defects.get(j).getDif());
+							dDifTF.setOnAction(new backLogTextFieldHandler());
+							backlogPane.add(dDifTF, x+1, y);
+							y++;
+							backlogPane.add(dTimeLbl, x, y);
+							dTimeTF = new TextField("" + p.backLogItems.get(i).defects.get(j).getTime());
+							dTimeTF.setOnAction(new backLogTextFieldHandler());
+							backlogPane.add(dTimeTF, x+1, y);
+							y++;
+							backlogPane.add(dRecLbl, x, y);
+							dRecTF = new TextField("" + p.backLogItems.get(i).defects.get(j).getDif());
+							dRecTF.setOnAction(new backLogTextFieldHandler());
+							backlogPane.add(dRecTF, x+1, y);
+							y++;
+						}
+						x -= 2;
+					}
 				}
 				else if(newProj.isSelected()) {
 					backlogPane.add(projNameLbl, 2, 5);
-					backlogPane.add(projDiffLbl, 2, 6);
-					backlogPane.add(projDefectsLbl, 2, 7);
-					backlogPane.add(projTimeLbl, 2, 8);
+					//backlogPane.add(projDiffLbl, 2, 6);
+					//backlogPane.add(projDefectsLbl, 2, 7);
+					//backlogPane.add(projTimeLbl, 2, 8);
 					backlogPane.add(projNameFld, 3, 5);
-					backlogPane.add(difficultyFld, 3, 6);
-					backlogPane.add(defectsFld, 3, 7);
-					backlogPane.add(timeFld, 3, 8);
+					/*for () {
+						
+					}*/
+					//backlogPane.add(difficultyFld, 3, 6);
+					//backlogPane.add(defectsFld, 3, 7);
+					//backlogPane.add(timeFld, 3, 8);
 					backlogPane.add(newProjBtn, 3, 9);
 					newProjBtn.setOnAction(new newProjBtnHandler());
 				}
 			}
 		}
+		
+		private class backLogTextFieldHandler implements EventHandler<ActionEvent> {
+			
+			public void handle(ActionEvent e) {
+				if (e.getSource().equals(blNameTF)) {
+					bL.setName(((TextField)e.getSource()).getText());
+				}
+				else if (e.getSource().equals(bLTimeTF)) {
+					bL.setTime(Integer.parseInt(((TextField)e.getSource()).getText()));
+				}
+				else if (e.getSource().equals(bLDifTF)) {
+					bL.setDif(Integer.parseInt(((TextField)e.getSource()).getText()));
+				}
+				else if (e.getSource().equals(pathTF)) {
+					path = pathTF.getText();
+				}
+				
+			}
+		}
+		
 		private class newProjBtnHandler implements EventHandler<ActionEvent>{
 			public void handle(ActionEvent e) {
 				projName = projNameFld.getText();
-				difficulty = Integer.parseInt(difficultyFld.getText());
-				defects = Integer.parseInt(defectsFld.getText());
-				time = Integer.parseInt(timeFld.getText());
+				//difficulty = Integer.parseInt(difficultyFld.getText());
+				//defects = Integer.parseInt(defectsFld.getText());
+				//time = Integer.parseInt(timeFld.getText());
+				//ANDREW: please set to variables
+				Project p = new Project(); // FIXME: must also take in backlog items
+				p.setName(projName);
+				
+				try {
+					p.save();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 		}

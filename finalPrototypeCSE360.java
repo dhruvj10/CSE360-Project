@@ -1,4 +1,4 @@
-package Prototype;
+package application;
 
 //package StartUp;
 
@@ -63,7 +63,7 @@ import java.util.Scanner;*/
 
 
     public static void authenticate() throws IOException {
-        File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\Prototype\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+        File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
         BufferedReader br = new BufferedReader(new FileReader(UserData));
         Scanner scanner = new Scanner(UserData);
         Scanner input = new Scanner(System.in);

@@ -1,5 +1,5 @@
 //package StartUp;
-package Prototype;
+package application;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -46,7 +46,7 @@ public class Project {
         
         //*****************************************
         //Create Scanner object for file and terminal
-        File file = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\Prototype\\dataBase.txt");
+        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\dataBase.txt");
         Scanner sc = new Scanner(file);
         Scanner keySc = new Scanner(System.in);
         numTypes = sc.nextInt();
@@ -382,10 +382,12 @@ public class Project {
 		File f = new File(p);
 		Scanner fS = new Scanner(f);
 		Project mP = new Project();
-		Scanner kS = new Scanner(System.in);
+		//Scanner kS = new Scanner(System.in);
 		backLogItems.clear();
 		ArrayList<String> projectNameList = new ArrayList<String>();
-		System.out.println("Which project would you like to load?");
+		//System.out.println("Which project would you like to load?");
+		
+		//FIXME make graphics
         //*****************************
 		//Each file may have multiple projects, pick one
 		//******************************
@@ -397,13 +399,13 @@ public class Project {
             }
             if (fS.hasNextLine()) {
             	line = fS.nextLine();
-                System.out.println(count + ". " + line);
+                //System.out.println(count + ". " + line);
                 count++;
                 projectNameList.add(line);
             }
         }
-        int num = 0;
-        num = Integer.parseInt(kS.nextLine());
+        int num = 1;
+        //num = Integer.parseInt(kS.nextLine());
         String pName = "";
         pName = projectNameList.get(num-1);
         fS = new Scanner(f);
