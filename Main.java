@@ -1,11 +1,5 @@
 package application;
 	
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -37,8 +31,8 @@ public static void main(String[] args) {
     Button authenticateBtn = new Button("Log in");
     TextField usernameTxtFld = new TextField();
     TextField passwordTxtFld = new TextField();
-    UserAuthPane userAuthPane = new UserAuthPane();
-	DefectsPane defectsPane = new DefectsPane();		
+    GridPane userAuthPane = new GridPane();
+	GridPane defectsPane = new GridPane();		
 	GridPane effortLogEditor = new GridPane();
 	TabPane tabPane = new TabPane();					
 	Tab mainTab = new Tab();					
@@ -77,6 +71,26 @@ public static void main(String[] args) {
 	Label projDefectsLbl = new Label("Project Defects: ");
 	Label projTimeLbl = new Label("Time (in hours): ");
 	
+	Label defSelProjLbl= new Label("Select the Project: ");
+	Label defNeworCurrLbl = new Label("New or Current Defect?");
+	Label defNameLbl = new Label("Defect Name and number: ");
+	Label defStatusLbl = new Label("Status of defect: ");
+	Label defSymptorResLbl = new Label("Defect Symptoms or Cause/Resolution:");
+	Label defInjStepLbl = new Label("Step when injected:");
+	Label defRemStepLbl = new Label("Step when removed: ");
+	Label defDefCatLbl = new Label("Defect Label: ");
+	Label defStatusMsgLbl = new Label("");
+	ComboBox<String> defSelProjBox = new ComboBox<String>();
+	ComboBox<String> defNeworCurrBox = new ComboBox<String>();
+	TextField defNameFld = new TextField();
+	ComboBox<String> defStatusBox = new ComboBox<String>();
+	TextField defSymptorResFld = new TextField();
+	ComboBox<String> defInjStepBox = new ComboBox<String>();
+	ComboBox<String> defRemStepBox = new ComboBox<String>();
+	ComboBox<String> defDefCatBox = new ComboBox<String>();
+	Button defSubmitBtn = new Button("Submit Changes");
+	Button defClearBtn = new Button("Clear Fields");
+	
 	//****** START OF MAIN TAB FEATURES ********************************
 	public void start(Stage primaryStage){
 		// Create a GridPane object and set its properties
@@ -84,8 +98,8 @@ public static void main(String[] args) {
 		pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
 		pane.setHgap(5.5); //set horizontal gap between columns
 		pane.setVgap(5.5); //set vertical gap between rows
-		pane.setPrefWidth(win_x_size);
-		pane.setPrefHeight(win_y_size);
+		pane.setPrefWidth(800);
+		pane.setPrefHeight(500);
 	
 		pane.add(header, 2, 0);				//add to pane in location 2,0
 		GridPane.setHalignment(header, HPos.CENTER);		//set horizontal alignment
@@ -177,6 +191,9 @@ public static void main(String[] args) {
 		
 		
 		//*****************START OF BACKLOG PANE CODE ***********************
+		backlogPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+        backlogPane.setHgap(5.5); //set horizontal gap between columns
+        backlogPane.setVgap(5.5); //set vertical gap between rows
 		existingProj.setToggleGroup(projectOptions);
 		newProj.setToggleGroup(projectOptions);
 		backlogPane.add(existingProj, 2, 2);
@@ -187,6 +204,40 @@ public static void main(String[] args) {
 		
 		
 		//****************END OF BACKLOG PANE CODE *************************
+		
+		//*****************START OF DEFECTS PANE CODE ***********************
+        defectsPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+        defectsPane.setHgap(5.5); //set horizontal gap between columns
+        defectsPane.setVgap(5.5); //set vertical gap between rows
+		defectsPane.add(defSelProjLbl, 1,1,1,1);
+		defectsPane.add(defSelProjBox, 1, 2,1,1);
+		defSelProjBox.getItems().addAll("Development Project", "Business Project");
+		defectsPane.add(defNeworCurrLbl, 1 , 3,1,1);
+		defectsPane.add(defNeworCurrBox, 1, 4,1,1);
+		defNeworCurrBox.getItems().addAll("New", "Current");
+		defectsPane.add(defNameLbl, 1, 5,1,1);
+		defectsPane.add(defNameFld, 1, 6,1,1);
+		defectsPane.add(defStatusLbl, 1, 7,1,1);
+		defectsPane.add(defStatusBox, 1, 8,1,1);
+		defStatusBox.getItems().addAll("Close", "Reopen");
+		defectsPane.add(defSymptorResLbl, 1, 9,1,1);
+		defectsPane.add(defSymptorResFld, 1, 10,1,1);
+		defectsPane.add(defInjStepLbl, 1, 11,1,1);
+		defectsPane.add(defInjStepBox, 1, 12,1,1);
+		defInjStepBox.getItems().addAll("Drafting", "Finalizing", "Team meeting", "Coach meeting", "Stakeholder meeting");
+		defectsPane.add(defRemStepLbl, 2, 11,1,1);
+		defectsPane.add(defRemStepBox, 2, 12,1,1);
+		defRemStepBox.getItems().addAll("Planning", "Information gathering", "Information understanding", "Verifying", "Understanding");
+		defectsPane.add(defDefCatLbl, 3, 11,1,1);
+		defectsPane.add(defDefCatBox, 3, 12,1,1);
+		defDefCatBox.getItems().addAll("60 checking", "70 Data", "80 Function", "90 System", "100 Environment");
+		defectsPane.add(defSubmitBtn, 1, 13,1,1);
+		defSubmitBtn.setOnAction(new defSubmitBtnHandler());
+		defectsPane.add(defClearBtn, 3, 1,1,1);
+		defClearBtn.setOnAction(new defClearBtnHandler());
+		
+		
+		//****************END OF DEFECTS PANE CODE *************************
 	}
 	
 	//**********************Button Handling intensifies************************
@@ -204,37 +255,11 @@ public static void main(String[] args) {
 			}
 		}	
 		private class AuthenticateBtnHandler implements EventHandler<ActionEvent>{
-			private static boolean authenticate(String username, String password) throws IOException {
-				File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\application\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
-		        BufferedReader br = new BufferedReader(new FileReader(UserData));
-		        Scanner scanner = new Scanner(UserData);
-		        Scanner input = new Scanner(System.in);
-		        try {
-		            String line;
-		            while ((line = br.readLine()) != null) {
-		                // process the line
-		                if(username.equals(line)){
-		                    if(password.equals(br.readLine())) {
-		                    	return true;
-		                    }
-		                }
-		            }
-
-		        } finally {}
-				
-				return false;
-			}
 			public void handle(ActionEvent e) {
 		    	username = usernameTxtFld.getText();
 		    	password = passwordTxtFld.getText();
 		    	boolean validUser = true;
 		    	//BEN: tie in the method that checks for if a user is valid to this boolean, and have it set the validUser to true or false
-		    	try {
-					validUser = authenticate(username, password);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 		    	if (validUser) {							//if user is valid, go to system screen
 		    		primaryStage.setScene(scene);
 		    		primaryStage.show();
@@ -246,7 +271,6 @@ public static void main(String[] args) {
 		    	}
 			}
 		}
-		
 		private class SubmitBtnMainHandler implements EventHandler<ActionEvent>{
 			public void handle(ActionEvent e) {
 				Label submission = new Label("Submitted.");
@@ -269,15 +293,15 @@ public static void main(String[] args) {
 					toDisplay.setText("existing");
 				}
 				else if(newProj.isSelected()) {
-					backlogPane.add(projNameLbl, 2, 5);
-					backlogPane.add(projDiffLbl, 2, 6);
-					backlogPane.add(projDefectsLbl, 2, 7);
-					backlogPane.add(projTimeLbl, 2, 8);
-					backlogPane.add(projNameFld, 3, 5);
-					backlogPane.add(difficultyFld, 3, 6);
-					backlogPane.add(defectsFld, 3, 7);
-					backlogPane.add(timeFld, 3, 8);
-					backlogPane.add(newProjBtn, 3, 9);
+					backlogPane.add(projNameLbl, 2, 6);
+					backlogPane.add(projDiffLbl, 2, 7);
+					backlogPane.add(projDefectsLbl, 2, 8);
+					backlogPane.add(projTimeLbl, 2, 9);
+					backlogPane.add(projNameFld, 3, 6);
+					backlogPane.add(difficultyFld, 3, 7);
+					backlogPane.add(defectsFld, 3, 8);
+					backlogPane.add(timeFld, 3, 9);
+					backlogPane.add(newProjBtn, 2, 10);
 					newProjBtn.setOnAction(new newProjBtnHandler());
 				}
 			}
@@ -288,6 +312,35 @@ public static void main(String[] args) {
 				difficulty = Integer.parseInt(difficultyFld.getText());
 				defects = Integer.parseInt(defectsFld.getText());
 				time = Integer.parseInt(timeFld.getText());
+				
+			}
+		}
+		private class defSubmitBtnHandler implements EventHandler<ActionEvent>{
+			public void handle(ActionEvent e) {
+				defSelProjBox.getSelectionModel().clearSelection();
+				defNeworCurrBox.getSelectionModel().clearSelection();
+				defNameFld.clear();
+				defStatusBox.getSelectionModel().clearSelection();
+				defSymptorResFld.clear();
+				defInjStepBox.getSelectionModel().clearSelection();
+				defRemStepBox.getSelectionModel().clearSelection();
+				defDefCatBox.getSelectionModel().clearSelection();
+				defStatusMsgLbl.setText("Submitted");
+				defStatusMsgLbl.setTextFill(Color.GREEN);
+				defectsPane.add(defStatusMsgLbl, 2, 13,1,1);
+				
+			}
+		}
+		private class defClearBtnHandler implements EventHandler<ActionEvent>{
+			public void handle(ActionEvent e) {
+				defSelProjBox.getSelectionModel().clearSelection();
+				defNeworCurrBox.getSelectionModel().clearSelection();
+				defNameFld.clear();
+				defStatusBox.getSelectionModel().clearSelection();
+				defSymptorResFld.clear();
+				defInjStepBox.getSelectionModel().clearSelection();
+				defRemStepBox.getSelectionModel().clearSelection();
+				defDefCatBox.getSelectionModel().clearSelection();
 				
 			}
 		}
