@@ -1,10 +1,9 @@
 //package StartUp;
-package Prototype;
+package application;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +22,23 @@ public class Project {
 		type = 0;
 		backLogItems = new ArrayList<BackLogItem>();
 		
+	}
+	
+	public Project(int num) throws IOException {
+		name = "";
+		type = 0;
+		backLogItems = new ArrayList<BackLogItem>();
+		load("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt", num);
+	}
+	
+	public void makeReport(String path) throws IOException {
+		File myProject = new File(path);
+        BufferedWriter br = new BufferedWriter(new FileWriter(myProject, false));
+        String out = toString();
+        br.write(out + System.lineSeparator());
+        br.flush();
+        br.close();
+        
 	}
 	
 	public void createProject() throws IOException {
@@ -46,7 +62,7 @@ public class Project {
         
         //*****************************************
         //Create Scanner object for file and terminal
-        File file = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\Prototype\\dataBase.txt");
+        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
         Scanner sc = new Scanner(file);
         Scanner keySc = new Scanner(System.in);
         numTypes = sc.nextInt();
@@ -368,7 +384,7 @@ public class Project {
 	    String save;
 	    save = keySc.nextLine();
 	    if (save.equals("1")) {
-	    	save();
+	    	//save(false, path);
 	    }
 	    //sc.close();
 	    keySc.close();
@@ -378,18 +394,19 @@ public class Project {
 	//Reads in from text file at given path and initializes this project with that info
 	//***********************************************
 	
-	public Project load(String p) throws IOException {
+	public Project load(String p, int num) throws IOException {
 		File f = new File(p);
 		Scanner fS = new Scanner(f);
 		Project mP = new Project();
-		Scanner kS = new Scanner(System.in);
+		//Scanner kS = new Scanner(System.in);
 		backLogItems.clear();
 		ArrayList<String> projectNameList = new ArrayList<String>();
-		System.out.println("Which project would you like to load?");
+		//System.out.println("Which project would you like to load?");
+		//FIXME make graphics
         //*****************************
 		//Each file may have multiple projects, pick one
 		//******************************
-		int count = 1;
+		int count = 0;
 		String line = "";
         while (fS.hasNextLine()) {
             while ((fS.hasNextLine()) && !(line.contains("."))) { // skip ahead to next project
@@ -397,13 +414,13 @@ public class Project {
             }
             if (fS.hasNextLine()) {
             	line = fS.nextLine();
-                System.out.println(count + ". " + line);
+                //System.out.println(count + ". " + line);
                 count++;
                 projectNameList.add(line);
             }
         }
-        int num = 0;
-        num = Integer.parseInt(kS.nextLine());
+        //int num = 1;
+        //num = Integer.parseInt(kS.nextLine());
         String pName = "";
         pName = projectNameList.get(num-1);
         fS = new Scanner(f);
@@ -412,6 +429,7 @@ public class Project {
         }
 		String in = "";
 		int inNum = -1;
+		long n = 0;
 		//in = fS.nextLine();
 		setName(line);
 		in = fS.nextLine();
@@ -429,6 +447,12 @@ public class Project {
 			inNum = Integer.parseInt(in);
 			bL.setDif(inNum);
 			in = fS.nextLine();
+			n = Long.parseLong(in);
+			bL.addTime(n);
+			in = fS.nextLine();
+			in.replace('&', '\n');
+			bL.setDescription(in);
+			in = fS.nextLine();
 			inNum = Integer.parseInt(in);
 			int numD = inNum;
 			for (int j = 0; j < numD; j++) {
@@ -445,6 +469,23 @@ public class Project {
 				in = fS.nextLine();
 				inNum = Integer.parseInt(in);
 				d.setRec(inNum);
+				in = fS.nextLine();
+				n = Long.parseLong(in);
+				d.addTime(n);
+				in = fS.nextLine();
+				d.setCause(in);
+				in = fS.nextLine();
+				d.setSymptoms(in);
+				in = fS.nextLine();
+				d.setSolution(in);
+				in = fS.nextLine();
+				inNum = Integer.parseInt(in);
+				if (inNum <= 0) {
+					d.close();
+				}
+				else {
+					d.open();
+				}
 				bL.defects.add(d);
 			}
 			backLogItems.add(bL);
@@ -457,48 +498,15 @@ public class Project {
 	//*****************************************
 	// Writes the project to a text file at a given path
 	//****************************************
-	public void save() throws IOException {
-		System.out.println("Please enter the path you would like to save to.");
-		Scanner s = new Scanner(System.in);
+	public void save(boolean append, String path) throws IOException {
 		
-		String path = s.nextLine();
-		System.out.println("Would you like:");
-		System.out.println("1. Write over file");
-		System.out.println("2. Add to file");
-		int op = Integer.parseInt(s.nextLine());
-		boolean append = true;
-		
-		if (op == 1) {
-			append = false;
-		}
 		File myProject = new File(path);
-		StringBuffer  sB = new StringBuffer();
-		Scanner sc = new Scanner(myProject);
         BufferedWriter brw = new BufferedWriter(new FileWriter(myProject, append));
         
         //Reading lines of the file and appending them to StringBuffer
         String line = "";
         String pName = "";
-        /*while (sc.hasNextLine()) {
-        	if (!(this.name.equals(pName))) {
-        		sB.append(sc.nextLine()+System.lineSeparator());
-        	}
-        	//line = sc.nextLine();
-        	if (line.equals(name)) {
-        		pName = line;
-        	}
-        }
-        while ((sc.hasNextLine()) && ((line = sc.nextLine()) != ".")) {
-        	// do nothing
-        }
-        while (sc.hasNextLine()) {
-        	sB.append(sc.nextLine()+System.lineSeparator());
-        }
-        String fileContents = sB.toString();
-        
-        sc.close();
-        brw.write(fileContents);
-        brw.flush();*/
+        String des = "";
         brw.write("."+System.lineSeparator());
         brw.flush();
         brw.write(name + System.lineSeparator());
@@ -514,6 +522,12 @@ public class Project {
         	brw.flush();
         	brw.write(backLogItems.get(i).getDif() + System.lineSeparator());
         	brw.flush();
+        	brw.write(backLogItems.get(i).getTimeE() + System.lineSeparator());
+        	brw.flush();
+        	des = backLogItems.get(i).getDescription();
+        	des.replace('\n', '&');
+        	brw.write(des + System.lineSeparator());
+        	brw.flush();
         	brw.write("" + backLogItems.get(i).defects.size() + System.lineSeparator());
         	brw.flush();
         	for (int j = 0; j < backLogItems.get(i).defects.size(); j++) {
@@ -527,15 +541,39 @@ public class Project {
             	brw.flush();
             	brw.write(backLogItems.get(i).defects.get(j).getRec() + System.lineSeparator());
             	brw.flush();
+            	brw.write(backLogItems.get(i).defects.get(j).getTimeE() + System.lineSeparator());
+            	brw.flush();
+            	des = backLogItems.get(i).defects.get(j).getCause();
+            	des.replace('\n', '&');
+            	brw.write(des + System.lineSeparator());
+            	brw.flush();
+            	des = backLogItems.get(i).defects.get(j).getSymptoms();
+            	des.replace('\n', '&');
+            	brw.write(des + System.lineSeparator());
+            	brw.flush();
+            	des = backLogItems.get(i).defects.get(j).getSolution();
+            	des.replace('\n', '&');
+            	brw.write(des + System.lineSeparator());
+            	brw.flush();
+            	if (backLogItems.get(i).defects.get(j).isOpen()) {
+            		brw.write("1" + System.lineSeparator());
+                	brw.flush();
+            	}
+            	else {
+            		brw.write("0" + System.lineSeparator());
+                	brw.flush();
+            	}
+            	
         	}
         }
-		
+        brw.close();
 	}
 	
 	public void combineItems (ArrayList<BackLogItem> l) {
 		// create new backlog item
 		BackLogItem newItem = new BackLogItem();
 		newItem.setName(l.get(0).getName());
+		newItem.setDescription(l.get(0).getDescription());
 		int avgD = 0;
 		int avgT = 0;
 		for (int i = 0; i < l.size(); i++) {
