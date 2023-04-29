@@ -13,24 +13,43 @@ import java.util.Set;
 
 public class Project {
 	
+	/******************************************************************************************************
+	 * Each project has an integer type which is referring to the "dataBase" with several types of projects
+	 * In order from top to bottom. It also has a String name and an ArrayList of BackLogItems
+	 ******************************************************************************************************/
+	
 	public ArrayList<BackLogItem> backLogItems;
 	private String name;
 	private int type;
 	
+	/*********************
+	 Basic Constructor
+	 ********************/
 	public Project() {
 		name = "";
-		type = 0;
 		backLogItems = new ArrayList<BackLogItem>();
-		
+		type = 0;
 	}
 	
+	/****************
+	 * 
+	 * @param num this represents which number project in the text file we want to load
+	 * It currently has the path hard coded in
+	 *FIXME add path to textfile
+	 * @throws IOException
+	 */
 	public Project(int num) throws IOException {
 		name = "";
-		type = 0;
 		backLogItems = new ArrayList<BackLogItem>();
+		type = 0;
 		load("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt", num);
 	}
 	
+	/*************
+	 * This just writes the toString of a project to a textfile
+	 * @param path
+	 * @throws IOException
+	 */
 	public void makeReport(String path) throws IOException {
 		File myProject = new File(path);
         BufferedWriter br = new BufferedWriter(new FileWriter(myProject, false));
@@ -40,6 +59,12 @@ public class Project {
         br.close();
         
 	}
+	
+	/********
+	 * This method creates a new project but is not currently implemented because
+	 * it interacts with the keyboard
+	 * @throws IOException
+	 */
 	
 	public void createProject() throws IOException {
 		// Initialize Variables
@@ -90,7 +115,7 @@ public class Project {
         
         //*********************************************************
         // now starts at the top of the file again and starts at the beginning
-        // of the given project type
+        // of the given project type.
         for (int j = 0; j <= numTypes; j++) {
             while(!(line.contains("."))) {
                 line = sc.nextLine(); // go through until we get to the right type
@@ -152,12 +177,22 @@ public class Project {
         }
         
 
+        /***************************************************
+         * Here we add every backlog item to a dummy project
+         * this is basically to cover all the bases of every
+         * possible item your project may want
+         * Then we loop through every backlog item and
+         * add them to items which will contain every unique name
+         * if there are two backlog items called "userInterface" the 
+         * dummy project will have both but the arrayList items will 
+         * only have one String
+         **************************************************/
         for (int i = 0; i < projectList.size(); i++) {
             // add all backLog Items from ith project into temp
             com.backLogItems.addAll(projectList.get(i).backLogItems);
             for (int j = 0; j < projectList.get(i).backLogItems.size(); j++) {
                 if (items.contains(projectList.get(i).backLogItems.get(j).getName())) {
-                    //com.combineItems(projectList.get(i).backLogItems.get(j), com.backLogItems.get(items.indexOf(projectList.get(i).backLogItems.get(j).getName())), 1);
+                    //do nothing
                 }
                 else {
                     items.add(projectList.get(i).backLogItems.get(j).getName());
@@ -166,6 +201,15 @@ public class Project {
             }
         }
         
+        /*************************************************************************
+         * For each unique backlog item name we loop through once
+         * 		Then we loop through and add each backlogitem and check if it's name 
+         * 		is the name of the current index of item
+         * 			If so we add the the arrayList duplicates
+         * 		after this inner loop we have an arrayList of each backlogitem with that name
+         * 		we then call combineItems on this dummy project with the param duplicates
+         * 		we will see how that method works on line 650ish
+         ***************************************************************************/
         ArrayList<BackLogItem> duplicates;
         for (int i = 0; i < items.size(); i++) {
             duplicates = new ArrayList<BackLogItem>();
@@ -177,6 +221,11 @@ public class Project {
             com.combineItems(duplicates);
         }
         
+        /****************
+         * We now have a project with no duplicate backlog items or defects but with all possible
+         * backlog items projects in this category have used
+         */
+        
         // create your project based on historical data
         System.out.println("Please enter your project's name: ");
         line = keySc.nextLine();
@@ -186,9 +235,15 @@ public class Project {
         
         // repeatedly ask the Scrum master to print all backLog items
         // or search for, edit, add or remove a backlog item
+        /*
+         * Launches edit interface on console, currently not graphics
+         */
         this.edit();
 	}
 	
+	/*************************
+	 * More overloaded constructors and setters and getters
+	 ***************************/
 	public Project(String n, int t) {
 		backLogItems = new ArrayList<BackLogItem>();
 		name = n;
@@ -213,13 +268,16 @@ public class Project {
 		name = n;
 	}
 	
+	/************************
+	 * This launches the menu that allows you to view and edit the backlog item through the console
+	 * @throws IOException
+	 */
+	
 	public void edit() throws IOException {
-		// same thing we had in the main before
 		String input = "";
 	       int num = -1;
 	       Scanner keySc = new Scanner(System.in);
 	    do {
-	        //System.out.println(myProject.toString());
 	        System.out.println("Press s to search for a backLog item.");
 	        System.out.println("Press e to edit for a backLog item.");
 	        System.out.println("Press a to add for a backLog item.");
@@ -397,14 +455,12 @@ public class Project {
 	public Project load(String p, int num) throws IOException {
 		File f = new File(p);
 		Scanner fS = new Scanner(f);
-		Project mP = new Project();
 		//Scanner kS = new Scanner(System.in);
 		backLogItems.clear();
 		ArrayList<String> projectNameList = new ArrayList<String>();
 		//System.out.println("Which project would you like to load?");
-		//FIXME make graphics
         //*****************************
-		//Each file may have multiple projects, pick one
+		// currently works with GUI simply used to load each project at a time
 		//******************************
 		int count = 0;
 		String line = "";
@@ -451,6 +507,7 @@ public class Project {
 			bL.addTime(n);
 			in = fS.nextLine();
 			in.replace('&', '\n');
+			in.replace('^', '.');
 			bL.setDescription(in);
 			in = fS.nextLine();
 			inNum = Integer.parseInt(in);
@@ -473,10 +530,16 @@ public class Project {
 				n = Long.parseLong(in);
 				d.addTime(n);
 				in = fS.nextLine();
+				in.replace('&', '\n');
+				in.replace('^', '.');
 				d.setCause(in);
 				in = fS.nextLine();
+				in.replace('&', '\n');
+				in.replace('^', '.');
 				d.setSymptoms(in);
 				in = fS.nextLine();
+				in.replace('&', '\n');
+				in.replace('^', '.');
 				d.setSolution(in);
 				in = fS.nextLine();
 				inNum = Integer.parseInt(in);
@@ -524,8 +587,13 @@ public class Project {
         	brw.flush();
         	brw.write(backLogItems.get(i).getTimeE() + System.lineSeparator());
         	brw.flush();
+        	/**********************************************************************
+        	 * Since we use periods and newlines to seperate types we replace them 
+        	 * with unusual characters to save so they are readable
+        	 ***********************************************************************/
         	des = backLogItems.get(i).getDescription();
         	des.replace('\n', '&');
+        	des.replace('.', '^');
         	brw.write(des + System.lineSeparator());
         	brw.flush();
         	brw.write("" + backLogItems.get(i).defects.size() + System.lineSeparator());
@@ -545,14 +613,17 @@ public class Project {
             	brw.flush();
             	des = backLogItems.get(i).defects.get(j).getCause();
             	des.replace('\n', '&');
+            	des.replace('.', '^');
             	brw.write(des + System.lineSeparator());
             	brw.flush();
             	des = backLogItems.get(i).defects.get(j).getSymptoms();
             	des.replace('\n', '&');
+            	des.replace('.', '^');
             	brw.write(des + System.lineSeparator());
             	brw.flush();
             	des = backLogItems.get(i).defects.get(j).getSolution();
             	des.replace('\n', '&');
+            	des.replace('.', '^');
             	brw.write(des + System.lineSeparator());
             	brw.flush();
             	if (backLogItems.get(i).defects.get(j).isOpen()) {
@@ -569,6 +640,14 @@ public class Project {
         brw.close();
 	}
 	
+	/*************************
+	 * We take in an ArrayList of BackLogItems which all should have the same name
+	 * We set the name and description of each backlogItem to the first one
+	 * We then find the average difficulty and time required from all of them 
+	 * Then we remove all the duplicates and add a new one with the average dif and time of all of them.
+	 * Next we do the same thing for the defects, described inside method
+	 * @param l
+	 */
 	public void combineItems (ArrayList<BackLogItem> l) {
 		// create new backlog item
 		BackLogItem newItem = new BackLogItem();
@@ -590,7 +669,11 @@ public class Project {
 		// add new backlog item
 		backLogItems.add(newItem);
 		
-		// combine defects
+		/******************************************************************
+		 * This current backlog item has every defect of all the duplicates
+		 * We now combine any duplicate defects in the same way we did
+		 * the backlog items
+		 ******************************************************************/
 		ArrayList<String> defectNames = new ArrayList<String>();
 		for (int i = 0; i < newItem.defects.size(); i++) {
 			if (!(defectNames.contains(newItem.defects.get(i).getName()))) {
