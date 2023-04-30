@@ -123,6 +123,8 @@ Project addedProject = new Project();
 	 * backLogItem and defect we are working on and their indexes
 	 ***************************************************************/
 	Project curP;
+	BackLogItem addedB = new BackLogItem();
+	Defect addedD = new Defect();
 	int pI = 0;
 	int dI = 0;
 	Defect curD;
@@ -176,6 +178,12 @@ Project addedProject = new Project();
 	Label effortCatLabel = new Label("Effort Category:");
 	Button clockOutBtn = new Button("Clock out");
 	Button mainSubmitBtn = new Button("Submit");
+	Button addDefectBtn = new Button("Add new Defect");
+	Button removeDefectBtn = new Button("Remove current Defect");
+	Button submitDefectBtn = new Button("Submit defect");
+	Button submitBackLogItemBtn = new Button("Submit Backlog item");
+	Button addBackLogItemBtn = new Button("Add new backlog item");
+	Button removeBackLogItemBtn = new Button("Remove current backLog Item");
 	GridPane backlogPane = new GridPane();
 	RadioButton existingProj = new RadioButton("Existing Project");
 	RadioButton newProj = new RadioButton("New Project");
@@ -188,6 +196,11 @@ Project addedProject = new Project();
 	TextField difficultyFld = new TextField();
 	TextField defectsFld = new TextField();
 	TextField timeFld = new TextField();
+	/************************************
+	 * TextFields to add new Defect/BackLogItem
+	 **********************************/
+	TextField newBlName = new TextField();
+	TextField newDName = new TextField();
 	/*****************************
 	BackLog Items textFields and Labels
 	//****************************/
@@ -252,6 +265,8 @@ Project addedProject = new Project();
 		* Initializes projects and sets current project, backLogItem and defects to the first one
 		******************************************************************************************/
 		populate(path, ListOfProjects);
+		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt");
+		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
 		curP = ListOfProjects.get(0);
 		curBl = curP.backLogItems.get(0);
 		curD = curBl.defects.get(0);
@@ -396,7 +411,9 @@ Project addedProject = new Project();
 		bLDifTF.setOnAction(new backLogTextFieldHandler());
 		bLTimeTF.setOnAction(new backLogTextFieldHandler());
 		bLDesTF.setOnAction(new backLogTextFieldHandler());
-		
+		newBlName.setOnAction(new backLogTextFieldHandler());
+		removeBackLogItemBtn.setOnAction(new removeButtonHandler());
+		addBackLogItemBtn.setOnAction(new addButtonHandler());
 		
 		backlogPane.add(bLDifLbl, 3, 5);
 		backlogPane.add(bLDifTF, 3, 6);
@@ -410,6 +427,8 @@ Project addedProject = new Project();
 		backlogPane.add(bLCurTimeETF, 7, 6);
 		backlogPane.add(bLTimeRLbl, 8, 5);
 		backlogPane.add(bLTimeRTF, 8, 6);
+		backlogPane.add(addBackLogItemBtn, 3, 10);
+		backlogPane.add(removeBackLogItemBtn, 3, 12);
 		
 		
 		//****************END OF BACKLOG PANE CODE *************************
@@ -442,6 +461,8 @@ Project addedProject = new Project();
 				dTimeRTF.setEditable(false);
 				dTimeETF = new TextField("" + curD.getTimeE());
 				dTimeETF.setEditable(false);
+				removeDefectBtn.setOnAction(new removeButtonHandler());
+				addDefectBtn.setOnAction(new addButtonHandler());
 				
 				dDifTF.setOnAction(new backLogTextFieldHandler());
 				dTimeTF.setOnAction(new backLogTextFieldHandler());
@@ -449,6 +470,7 @@ Project addedProject = new Project();
 				dSymTF.setOnAction(new backLogTextFieldHandler());
 				dSolTF.setOnAction(new backLogTextFieldHandler());
 				dCauseTF.setOnAction(new backLogTextFieldHandler());
+				newDName.setOnAction(new backLogTextFieldHandler());
 				
 				defectsPane.add(dDifLbl, 3, 5);
 				defectsPane.add(dDifTF, 3, 6);
@@ -468,6 +490,8 @@ Project addedProject = new Project();
 				defectsPane.add(dCauseTF, 4, 9);
 				defectsPane.add(dSolLbl, 5, 8);
 				defectsPane.add(dSolTF, 5, 9);
+				defectsPane.add(addDefectBtn, 6, 9);
+				defectsPane.add(removeDefectBtn, 9, 12);
 				
 				
 				
@@ -560,6 +584,60 @@ Project addedProject = new Project();
 			}
 		}
 		
+		private class removeButtonHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				if (e.getSource().equals(removeBackLogItemBtn)) {
+					curP.backLogItems.remove(bLI);
+					BackLogItem.getItems().remove(bLI);
+					BackLogItem.getSelectionModel().select(0);
+				}
+				if (e.getSource().equals(removeDefectBtn)) {
+					curBl.defects.remove(dI);
+					Defect.getItems().remove(dI);
+					Defect.getSelectionModel().select(0);
+				}
+			}
+		}
+		
+		private class submitBtnHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				if (e.getSource().equals(submitBackLogItemBtn)) {
+					addedB = new BackLogItem();
+					Defect d = new Defect();
+					d.setName("New Defect");
+					addedB.defects.add(d);
+					addedB.setName(newBlName.getText());
+					curP.backLogItems.add(addedB);
+					BackLogItem.getItems().add(addedB.getName());
+					backlogPane.getChildren().remove(newBlName);
+					backlogPane.getChildren().remove(submitBackLogItemBtn);
+				}
+				if (e.getSource().equals(submitDefectBtn)) {
+					addedD = new Defect();
+					addedD.setName(newDName.getText());
+					curBl.defects.add(addedD);
+					Defect.getItems().add(addedD.getName());
+					defectsPane.getChildren().remove(newDName);
+					defectsPane.getChildren().remove(submitDefectBtn);
+				}
+			}
+		}
+		
+		private class addButtonHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				if (e.getSource().equals(addBackLogItemBtn)) {
+					backlogPane.add(newBlName, 3, 14);
+					backlogPane.add(submitBackLogItemBtn, 3, 16);
+					submitBackLogItemBtn.setOnAction(new submitBtnHandler());
+				}
+				if (e.getSource().equals(addDefectBtn)) {
+					defectsPane.add(newDName, 3, 14);
+					defectsPane.add(submitDefectBtn, 3, 16);
+					submitDefectBtn.setOnAction(new submitBtnHandler());
+				}
+			}
+		}
+		
 		private class SubmitBtnMainHandler implements EventHandler<ActionEvent>{
 			public void handle(ActionEvent e) {
 				Label submission = new Label("Submitted.");
@@ -587,14 +665,16 @@ Project addedProject = new Project();
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
 				}
 				try {
 					ListOfProjects.get(0).makeReport("C:\\Users\\benja\\Documents\\report.txt");
+					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt");
+				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
 				EncryptOrDecrypt(path);
 			}
 		}
@@ -616,17 +696,75 @@ Project addedProject = new Project();
 					BackLogItem.getItems().add(curP.backLogItems.get(i).getName());
 				}
 				BackLogItem.getSelectionModel().select(0);
+				bLI = 0;
 				
-				if (e.getSource().equals(ProjectType)) {
+			}
+		}
+		/*
+		 * When we select a backLogItem it fills the defect Combo with the selected backLogItems'
+		 * defects
+		 */
+		
+		private class backlogComboHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				bLI = BackLogItem.getSelectionModel().getSelectedIndex();
+				if (bLI == -1) {
+					bLI = 0;
+				}
+				curBl = curP.backLogItems.get(bLI);
+				bLDifTF.setText(curBl.getDif() + "");
+				bLTimeTF.setText(curBl.getTime() + "");
+				bLTimeETF.setText("" + curBl.getTimeE());
+				bLDesTF.setText(curBl.getDescription());
+				bLTimeRTF.setText("" + curBl.getTimeR());
+				/*********************
+				 update defect list
+				 */
+				Defect.getItems().clear();
+				for (int i = 0; i < curBl.defects.size(); i++) {
+					Defect.getItems().add(curBl.defects.get(i).getName());
+				}
+				Defect.getSelectionModel().select(0);
+				dI = 0;
+			}
+		}
+		
+		private class defectComboHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				dI = Defect.getSelectionModel().getSelectedIndex();
+				curD = new Defect();
+				if (dI < 0) {
+					dI = 0;
+				}
+				curD = curBl.defects.get(dI);
+				dDifTF.setText(curD.getDif() + "");
+				dTimeTF.setText(curD.getTime() + "");
+				dRecTF.setText(curD.getRec() + "");
+				dTimeETF.setText("" + curD.getTimeE());
+				dCauseTF.setText(curD.getCause());
+				dTimeRTF.setText("" + curD.getTimeR());
+				dSymTF.setText(curD.getSymptoms());
+				dSolTF.setText(curD.getSolution());
+			}
+		}
+		
+		/*
+		 * enter does nothing atm
+		 */
+		private class enterBtnHandler implements EventHandler<ActionEvent> {
+			public void handle(ActionEvent e) {
+				//BEN: this would be the spot to have methods producing strings to 
+				//output text based on what options your backlog program uses, the .setText takes a string parameter 
+				//and displays it
 					 index = ProjectType.getSelectionModel().getSelectedIndex();
 					 projectNameList = new ArrayList<String>();
 					 projectList = new ArrayList<Project>();
 					 items = new ArrayList<String>();
-					 com = new Project();
+					 com.backLogItems.clear();
 					 Scanner sc = null;
 					 file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\dataBase.txt");
 				     //numTypes = Integer.parseInt(projectTypeName) - 1;
-				        projectTypeName = projectNameList.get(numTypes);
+				        projectTypeName = ProjectType.getSelectionModel().getSelectedItem();
 				        //System.out.println("Ok, your project is a " + projectTypeName);
 				        try {
 							sc = new Scanner(file);
@@ -634,11 +772,14 @@ Project addedProject = new Project();
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+				        /*******
+				         * FIXME when you add a second project 
+				         */
 				        
 				        //*********************************************************
 				        // now starts at the top of the file again and starts at the beginning
 				        // of the given project type.
-				        for (int j = 0; j <= numTypes; j++) {
+				        for (int j = 0; j <= index; j++) {
 				            while(!(line.contains("."))) {
 				                line = sc.nextLine(); // go through until we get to the right type
 				            }
@@ -658,7 +799,6 @@ Project addedProject = new Project();
 				            // set name of project
 				            line = sc.nextLine();
 				            numBL = Integer.parseInt(line);
-				            projectList.add(tempP);
 				            // loop through this list once for each backLog item
 				            for (int i = 0; i < numBL; i++) {
 				                line = sc.nextLine();
@@ -675,7 +815,6 @@ Project addedProject = new Project();
 				                line = sc.nextLine();
 				                numDef = Integer.parseInt(line);
 				                //line = sc.nextLine(); // skip Defect 1:
-				                tempP.backLogItems.add(item);
 				                // add backLog item to project
 				                // go through this loop once for every defect
 				                for (int k = 0; k < numDef; k++) {
@@ -695,7 +834,10 @@ Project addedProject = new Project();
 				                    item.defects.add(def);
 				                    //line = sc.nextLine(); // make sure it skips over "defect 1:"
 				                }
+				                tempP.backLogItems.add(item);
 				            }
+				            projectList.add(tempP);
+				        }
 				            /***************************************************
 				             * Here we add every backlog item to a dummy project
 				             * this is basically to cover all the bases of every
@@ -709,7 +851,7 @@ Project addedProject = new Project();
 				            for (int i = 0; i < projectList.size(); i++) {
 				                // add all backLog Items from ith project into temp
 				                com.backLogItems.addAll(projectList.get(i).backLogItems);
-				                for (j = 0; j < projectList.get(i).backLogItems.size(); j++) {
+				                for (int j = 0; j < projectList.get(i).backLogItems.size(); j++) {
 				                    if (items.contains(projectList.get(i).backLogItems.get(j).getName())) {
 				                        //do nothing
 				                    }
@@ -732,7 +874,7 @@ Project addedProject = new Project();
 				            ArrayList<BackLogItem> duplicates;
 				            for (int i = 0; i < items.size(); i++) {
 				                duplicates = new ArrayList<BackLogItem>();
-				                for (j = 0; j < com.backLogItems.size(); j++) {
+				                for (int j = 0; j < com.backLogItems.size(); j++) {
 				                    if (com.backLogItems.get(j).getName().equals(items.get(i))) {
 				                        duplicates.add(com.backLogItems.get(j));
 				                    }
@@ -756,66 +898,6 @@ Project addedProject = new Project();
 						/*
 						 * We now have the new initial project
 						 */
-				        }
-				}
-			}
-		}
-		/*
-		 * When we select a backLogItem it fills the defect Combo with the selected backLogItems'
-		 * defects
-		 */
-		
-		private class backlogComboHandler implements EventHandler<ActionEvent> {
-			public void handle(ActionEvent e) {
-				bLI = BackLogItem.getSelectionModel().getSelectedIndex();
-				curBl = new BackLogItem();
-				if (bLI == -1) {
-					bLI = 0;
-				}
-				curBl = curP.backLogItems.get(bLI);
-				bLDifTF.setText(curBl.getDif() + "");
-				bLTimeTF.setText(curBl.getTime() + "");
-				bLTimeETF.setText("" + curBl.getTimeE());
-				bLDesTF.setText(curBl.getDescription());
-				bLTimeRTF.setText("" + curBl.getTimeR());
-				/*********************
-				 update defect list
-				 */
-				Defect.getItems().clear();
-				for (int i = 0; i < curBl.defects.size(); i++) {
-					Defect.getItems().add(curBl.defects.get(i).getName());
-				}
-				Defect.getSelectionModel().select(0);
-			}
-		}
-		
-		private class defectComboHandler implements EventHandler<ActionEvent> {
-			public void handle(ActionEvent e) {
-				dI = Defect.getSelectionModel().getSelectedIndex();
-				curD = new Defect();
-				if (dI == -1) {
-					dI = 0;
-				}
-				curD = curBl.defects.get(dI);
-				dDifTF.setText(curD.getDif() + "");
-				dTimeTF.setText(curD.getTime() + "");
-				dRecTF.setText(curD.getRec() + "");
-				dTimeETF.setText("" + curD.getTimeE());
-				dCauseTF.setText(curD.getCause());
-				dTimeRTF.setText("" + curD.getTimeR());
-				dSymTF.setText(curD.getSymptoms());
-				dSolTF.setText(curD.getSolution());
-			}
-		}
-		
-		/*
-		 * enter does nothing atm
-		 */
-		private class enterBtnHandler implements EventHandler<ActionEvent> {
-			public void handle(ActionEvent e) {
-				//BEN: this would be the spot to have methods producing strings to 
-				//output text based on what options your backlog program uses, the .setText takes a string parameter 
-				//and displays it
 				addedProject.setName(projNameFld.getText());
 				ListOfProjects.add(addedProject);
 	            ProjectList.getItems().add(addedProject.getName());
@@ -883,9 +965,14 @@ Project addedProject = new Project();
 					curBl.defects.get(dI).setSolution(curD.getSolution());
 				}
 				else if (e.getSource().equals(projNameFld)) {
-					tempP.setName(projNameFld.getSelectedText());
+					addedProject.setName(projNameFld.getSelectedText());
 				}
-				
+				else if (e.getSource().equals(newBlName)) {
+					addedProject.setName(projNameFld.getSelectedText());
+				}
+				else if (e.getSource().equals(newDName)) {
+					addedProject.setName(projNameFld.getSelectedText());
+				}
 				/*else if (e.getSource().equals(pathTF)) {
 					path = pathTF.getText().toString();
 				}*/
@@ -932,7 +1019,7 @@ Project addedProject = new Project();
 		            numProjects = sc.nextInt();
 		        }
 		        pane.add(ProjectType, 6, 10);
-		        ProjectType.setOnAction(new projectComboHandler());
+		        //ProjectType.setOnAction(new projectComboHandler());
 		        
 		        //projectTypeName = keySc.nextLine();
 		       
