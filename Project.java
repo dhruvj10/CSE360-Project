@@ -1,5 +1,4 @@
-//package StartUp;
-package application;
+package runProj;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,7 +41,7 @@ public class Project {
 		name = "";
 		backLogItems = new ArrayList<BackLogItem>();
 		type = 0;
-		load("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt", num);
+		load("project.txt", num);
 	}
 	
 	/*************
@@ -87,7 +86,7 @@ public class Project {
         
         //*****************************************
         //Create Scanner object for file and terminal
-        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
+        File file = new File("dataBase.txt");
         Scanner sc = new Scanner(file);
         Scanner keySc = new Scanner(System.in);
         numTypes = sc.nextInt();

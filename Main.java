@@ -1,4 +1,8 @@
-package application;
+//GUI Author: Andrew Bartle
+//Contributors: Benjamin Jones, Logan Goswick
+
+
+package runProj;
 	
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -134,7 +138,7 @@ Project addedProject = new Project();
 	/*
 	 * Just the path I have hard coded for the project to load and save
 	 */
-	String path = "C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\project.txt";
+	String path = "project.txt";
 	/********************************************************
 	 * Buttons tabs and panes, plus the userName and pWord
 	 ********************************************************/
@@ -145,7 +149,7 @@ Project addedProject = new Project();
     Button authenticateBtn = new Button("Log in");
     TextField usernameTxtFld = new TextField();
     TextField passwordTxtFld = new TextField();
-    UserAuthPane userAuthPane = new UserAuthPane();
+    GridPane userAuthPane = new GridPane();
 	GridPane defectsPane = new GridPane();		
 	GridPane effortLogEditor = new GridPane();
 	TabPane tabPane = new TabPane();					
@@ -265,8 +269,8 @@ Project addedProject = new Project();
 		* Initializes projects and sets current project, backLogItem and defects to the first one
 		******************************************************************************************/
 		populate(path, ListOfProjects);
-		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt");
-		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
+		EncryptOrDecrypt("userData.txt");
+		EncryptOrDecrypt("dataBase.txt");
 		curP = ListOfProjects.get(0);
 		curBl = curP.backLogItems.get(0);
 		curD = curBl.defects.get(0);
@@ -275,8 +279,8 @@ Project addedProject = new Project();
 		pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
 		pane.setHgap(5.5); //set horizontal gap between columns
 		pane.setVgap(5.5); //set vertical gap between rows
-		pane.setPrefWidth(win_x_size);
-		pane.setPrefHeight(win_y_size);
+		pane.setPrefWidth(800);
+		pane.setPrefHeight(500);
 	
 		pane.add(header, 2, 0);				//add to pane in location 2,0
 		GridPane.setHalignment(header, HPos.CENTER);		//set horizontal alignment
@@ -384,12 +388,12 @@ Project addedProject = new Project();
 		/*********************************************
 		 * Initialize backLog pane and fill combo
 		 ***********************************************/
-		backlogPane.add(backlogLabel, 0, 5);				//add to pane and set position
+		backlogPane.add(backlogLabel, 1, 1);				//add to pane and set position
 		for (int i = 0; i < curP.backLogItems.size(); i++) {
 			BackLogItem.getItems().add(curP.backLogItems.get(i).getName());
 		}
 		BackLogItem.getSelectionModel().select(0);
-		backlogPane.add(BackLogItem, 1, 5);			//add to pane and set position
+		backlogPane.add(BackLogItem, 1, 2);			//add to pane and set position
 		BackLogItem.setOnAction(new backlogComboHandler());
 		
 		/*************************************
@@ -415,31 +419,34 @@ Project addedProject = new Project();
 		removeBackLogItemBtn.setOnAction(new removeButtonHandler());
 		addBackLogItemBtn.setOnAction(new addButtonHandler());
 		
-		backlogPane.add(bLDifLbl, 3, 5);
-		backlogPane.add(bLDifTF, 3, 6);
-		backlogPane.add(bLTimeLbl, 4, 5);
-		backlogPane.add(bLTimeTF, 4, 6);
-		backlogPane.add(bLDesLbl, 5, 5);
-		backlogPane.add(bLDesTF, 5, 6);
-		backlogPane.add(bLTimeELbl, 6, 5);
-		backlogPane.add(bLTimeETF, 6, 6);
-		backlogPane.add(bLCurTimeELbl, 7, 5);
-		backlogPane.add(bLCurTimeETF, 7, 6);
-		backlogPane.add(bLTimeRLbl, 8, 5);
-		backlogPane.add(bLTimeRTF, 8, 6);
-		backlogPane.add(addBackLogItemBtn, 3, 10);
-		backlogPane.add(removeBackLogItemBtn, 3, 12);
+		backlogPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+		backlogPane.setHgap(5.5); //set horizontal gap between columns
+        backlogPane.setVgap(5.5); //set vertical gap between rows
+		backlogPane.add(bLDifLbl, 1, 3);
+		backlogPane.add(bLDifTF, 1, 4);
+		backlogPane.add(bLTimeLbl, 1, 5);
+		backlogPane.add(bLTimeTF, 1, 6);
+		backlogPane.add(bLDesLbl, 1, 7);
+		backlogPane.add(bLDesTF, 1, 8);
+		backlogPane.add(bLTimeELbl, 1, 9);
+		backlogPane.add(bLTimeETF, 1, 10);
+		backlogPane.add(bLCurTimeELbl, 2, 1);
+		backlogPane.add(bLCurTimeETF, 2, 2);
+		backlogPane.add(bLTimeRLbl, 2, 3);
+		backlogPane.add(bLTimeRTF, 2, 4);
+		backlogPane.add(addBackLogItemBtn, 3, 2);
+		backlogPane.add(removeBackLogItemBtn, 3, 3);
 		
 		
 		//****************END OF BACKLOG PANE CODE *************************
 		
 		//*****************START OF Defect PANE CODE ***********************
-				defectsPane.add(defectLabel, 0, 5);				//add to pane and set position
+				defectsPane.add(defectLabel, 1, 1);				//add to pane and set position
 				for (int i = 0; i < curBl.defects.size(); i++) {
 					Defect.getItems().add(curBl.defects.get(i).getName());
 				}
 				Defect.getSelectionModel().select(0);
-				defectsPane.add(Defect, 1, 5);	 //add to pane and set position
+				defectsPane.add(Defect, 1, 2);	 //add to pane and set position
 				Defect.setOnAction(new defectComboHandler());
 				
 				/*************************************
@@ -472,26 +479,29 @@ Project addedProject = new Project();
 				dCauseTF.setOnAction(new backLogTextFieldHandler());
 				newDName.setOnAction(new backLogTextFieldHandler());
 				
-				defectsPane.add(dDifLbl, 3, 5);
-				defectsPane.add(dDifTF, 3, 6);
-				defectsPane.add(dTimeLbl, 4, 5);
-				defectsPane.add(dTimeTF, 4, 6);
-				defectsPane.add(dRecLbl, 5, 5);
-				defectsPane.add(dRecTF, 5, 6);
-				defectsPane.add(dTimeELbl, 6, 5);
-				defectsPane.add(dTimeETF, 6, 6);
-				defectsPane.add(dCurTimeELbl, 7, 5);
-				defectsPane.add(dCurTimeETF, 7, 6);
-				defectsPane.add(dTimeRLbl, 8, 5);
-				defectsPane.add(dTimeRTF, 8, 6);
-				defectsPane.add(dSymLbl, 3, 8);
-				defectsPane.add(dSymTF, 3, 9);
-				defectsPane.add(dCauseLbl, 4, 8);
-				defectsPane.add(dCauseTF, 4, 9);
-				defectsPane.add(dSolLbl, 5, 8);
-				defectsPane.add(dSolTF, 5, 9);
-				defectsPane.add(addDefectBtn, 6, 9);
-				defectsPane.add(removeDefectBtn, 9, 12);
+				defectsPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+				defectsPane.setHgap(5.5); //set horizontal gap between columns
+		        defectsPane.setVgap(5.5); //set vertical gap between rows
+				defectsPane.add(dDifLbl, 1, 3);
+				defectsPane.add(dDifTF, 1, 4);
+				defectsPane.add(dTimeLbl, 1, 5);
+				defectsPane.add(dTimeTF, 1, 6);
+				defectsPane.add(dRecLbl, 1, 7);
+				defectsPane.add(dRecTF, 1, 8);
+				defectsPane.add(dTimeELbl, 1, 9);
+				defectsPane.add(dTimeETF, 1, 10);
+				defectsPane.add(dCurTimeELbl, 2, 1);
+				defectsPane.add(dCurTimeETF, 2, 2);
+				defectsPane.add(dTimeRLbl, 2, 3);
+				defectsPane.add(dTimeRTF, 2, 4);
+				defectsPane.add(dSymLbl, 2, 5);
+				defectsPane.add(dSymTF, 2, 6);
+				defectsPane.add(dCauseLbl, 2, 7);
+				defectsPane.add(dCauseTF, 2, 8);
+				defectsPane.add(dSolLbl, 2, 9);
+				defectsPane.add(dSolTF, 2, 10);
+				defectsPane.add(addDefectBtn, 3, 2);
+				defectsPane.add(removeDefectBtn, 3, 3);
 				
 				
 				
@@ -542,7 +552,7 @@ Project addedProject = new Project();
 				/*
 				 * Reads through userdata file to check if we have a userName and password that match our input
 				 */
-				File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+				File UserData = new File("userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
 		        BufferedReader br = new BufferedReader(new FileReader(UserData));
 		        Scanner scanner = new Scanner(UserData);
 		        Scanner input = new Scanner(System.in);
@@ -626,13 +636,13 @@ Project addedProject = new Project();
 		private class addButtonHandler implements EventHandler<ActionEvent> {
 			public void handle(ActionEvent e) {
 				if (e.getSource().equals(addBackLogItemBtn)) {
-					backlogPane.add(newBlName, 3, 14);
-					backlogPane.add(submitBackLogItemBtn, 3, 16);
+					backlogPane.add(newBlName, 1, 12);
+					backlogPane.add(submitBackLogItemBtn, 1, 13);
 					submitBackLogItemBtn.setOnAction(new submitBtnHandler());
 				}
 				if (e.getSource().equals(addDefectBtn)) {
-					defectsPane.add(newDName, 3, 14);
-					defectsPane.add(submitDefectBtn, 3, 16);
+					defectsPane.add(newDName, 1, 12);
+					defectsPane.add(submitDefectBtn, 1, 13);
 					submitDefectBtn.setOnAction(new submitBtnHandler());
 				}
 			}
@@ -667,14 +677,14 @@ Project addedProject = new Project();
 					}
 				}
 				try {
-					ListOfProjects.get(0).makeReport("C:\\Users\\benja\\Documents\\report.txt");
+					ListOfProjects.get(0).makeReport("report.txt");
 					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\userData.txt");
-				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\dataBase.txt");
+				EncryptOrDecrypt("userData.txt");
+				EncryptOrDecrypt("dataBase.txt");
 				EncryptOrDecrypt(path);
 			}
 		}
@@ -762,7 +772,7 @@ Project addedProject = new Project();
 					 items = new ArrayList<String>();
 					 com.backLogItems.clear();
 					 Scanner sc = null;
-					 file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\dataBase.txt");
+					 file = new File("dataBase.txt");
 				     //numTypes = Integer.parseInt(projectTypeName) - 1;
 				        projectTypeName = ProjectType.getSelectionModel().getSelectedItem();
 				        //System.out.println("Ok, your project is a " + projectTypeName);
@@ -993,7 +1003,7 @@ Project addedProject = new Project();
 		        
 		        //*****************************************
 		        //Create Scanner object for file and terminal
-		        File file = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\dataBase.txt");
+		        File file = new File("dataBase.txt");
 		        Scanner sc = null;
 		        numTypes = -1;
 				try {
