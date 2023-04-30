@@ -1,27 +1,17 @@
-package application;
+//package Prototype;
 
 public class Defect {
 	
-	private int dif;
-	private int time;
-	private int rec;
-	private String name;
-	private long timeElapsed;
-	private boolean open;
-	private String solution;
-	private String symptoms;
-	private String cause;
+	int dif;
+	int time;
+	int rec;
+	String name;
 	
 	public Defect() {
 		dif = 1;
 		time = 1;
 		rec = 1;
 		name = "";
-		timeElapsed = 0;
-		open = false;
-		solution = "";
-		symptoms = "";
-		cause = "";
 	}
 	
 	public Defect(int d, int t, int r, String n) {
@@ -29,54 +19,6 @@ public class Defect {
 		time = t;
 		rec = r;
 		name = n;
-	}
-	
-	public boolean isOpen() {
-		return open;
-	}
-	
-	public void close() {
-		open = false;
-	}
-	
-	public void open() {
-		open = true;
-	}
-	
-	public String getSolution() {
-		return solution;
-	}
-	
-	public void setSolution(String s) {
-		solution = s;
-	}
-	
-	public String getCause() {
-		return cause;
-	}
-	
-	public void setCause(String s) {
-		cause = s;
-	}
-	
-	public String getSymptoms() {
-		return symptoms;
-	}
-	
-	public void setSymptoms(String d) {
-		symptoms = d;
-	}
-	
-	public long getTimeE() {
-		return timeElapsed;
-	}
-	
-	public void addTime(long t) {
-		timeElapsed += t;
-	}
-	
-	public long getTimeR() {
-		return time - timeElapsed;
 	}
 	
 	public int getDif() {
@@ -111,16 +53,13 @@ public class Defect {
 		rec = r;
 	}
 	
+	
 	public String toString() {
 		String out = "";
 		out = name;
 		out += "\n\t\tDifficulty: " + dif + "\\10";
 		out += "\n\t\tTime required: " + time + " hours.";
-		out += "\n\t\tChance of repeating " + rec + "\\10";
-		out += "Solution: " + solution;
-		out += "Symptoms: " + symptoms;
-		out += "Cause: " + cause;
-		
+		out += "\n\t\tChance of repeating " + rec + "\\10\n";
 		return out;
 	}
 	

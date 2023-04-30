@@ -1,104 +1,125 @@
-Madden24
-5
+.
+Madden25
+4
 BackLog Item 1:
 Main Menu
 4
 2
+0
+Description
 1
 Defect 1:
 Loss of Connection
 2
 4
 7
+0
+Cause
+Symptom
+Solution8
+0
 BackLog Item 2:
 Franchise Mode
 9
 10
+28
+Description
 1
 Defect 1:
 AI trade logic errors
 7
 4
 6
+0
+Cause
+Symptom
+Solution8
+0
 BackLog Item 3:
 Ultimate Team
 6
 7
+14
+Description
 1
 Defect 1:
 Hacking
 2
 8
 9
+0
+Cause
+Symptom
+Solution8
+0
 BackLog Item 4:
 Exhibition
 3
 7
-1
-Defect 1:
-Keeper Logic
-3
-4
-4
-BackLog Item 5:
-The Yard
-7
-8
-1
-Defect 1:
-Server Crash
-3
-9
-8
-Madden24
-5
-BackLog Item 1:
-Main Menu
-4
-2
+14
+Description
 1
 Defect 1:
 Loss of Connection
-2
+3
 4
-7
+4
+0
+Cause
+Symptom
+Solution
+0
+.
+Tweeter
+3
+BackLog Item 1:
+UserInterface
+12
+2
+0
+
+1
+Defect 1:
+Frozen Screen
+6
+4
+4
+0
+
+
+
+0
 BackLog Item 2:
-Franchise Mode
-9
-10
-1
-Defect 1:
-AI trade logic errors
-7
+Direct Messaging
+6
 4
-6
-BackLog Item 3:
-Ultimate Team
-6
-7
+0
+
 1
 Defect 1:
-Hacking
+Activity Light not working
+3
+4
 2
-8
-9
-BackLog Item 4:
-Exhibition
+0
+
+
+
+0
+BackLog Item 3:
+Posting
 3
-7
+22
+0
+
 1
 Defect 1:
-Keeper Logic
+Loss of Connection
 3
+14
 4
-4
-BackLog Item 5:
-The Yard
-7
-9
-1
-Defect 1:
-Server Crash
-3
-9
-8
+0
+
+
+
+0
