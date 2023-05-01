@@ -1,12 +1,12 @@
 .
-Madden25
-4
+Madden 25
+5
 BackLog Item 1:
 Main Menu
 4
 2
 0
-Description
+
 1
 Defect 1:
 Loss of Connection
@@ -14,16 +14,16 @@ Loss of Connection
 4
 7
 0
-Cause
-Symptom
-Solution8
+
+
+
 0
 BackLog Item 2:
 Franchise Mode
 9
 10
-28
-Description
+0
+
 1
 Defect 1:
 AI trade logic errors
@@ -31,16 +31,16 @@ AI trade logic errors
 4
 6
 0
-Cause
-Symptom
-Solution8
+
+
+
 0
 BackLog Item 3:
 Ultimate Team
 6
 7
-14
-Description
+0
+
 1
 Defect 1:
 Hacking
@@ -48,78 +48,129 @@ Hacking
 8
 9
 0
-Cause
-Symptom
-Solution8
+
+
+
 0
 BackLog Item 4:
 Exhibition
 3
 7
-14
-Description
-1
-Defect 1:
-Loss of Connection
-3
-4
-4
-0
-Cause
-Symptom
-Solution
-0
-.
-Tweeter
-3
-BackLog Item 1:
-UserInterface
-12
-2
 0
 
 1
 Defect 1:
-Frozen Screen
-6
+Keeper Logic
+3
 4
 4
+0
+
+
+
+0
+BackLog Item 5:
+The Yard
+1
+1
+0
+
+1
+Defect 1:
+New defect
+1
+1
+1
+0
+
+
+
+0
+.
+NBA2K
+5
+BackLog Item 1:
+Main Menu
+4
+8
+0
+Menu
+1
+Defect 1:
+Loss of Connection
+2
+4
+7
 0
 
 
 
 0
 BackLog Item 2:
-Direct Messaging
-6
-4
+Franchise Mode
+9
+10
 0
 
 1
 Defect 1:
-Activity Light not working
-3
+AI trade logic errors
+7
 4
-2
+6
 0
 
 
 
 0
 BackLog Item 3:
-Posting
-3
-22
+Ultimate Team
+6
+7
 0
 
 1
 Defect 1:
-Loss of Connection
+Hacking
+2
+8
+9
+0
+
+
+
+0
+BackLog Item 4:
+Exhibition
 3
-14
+7
+0
+
+1
+Defect 1:
+Keeper Logic
+3
+4
 4
 0
 
 
+
+0
+BackLog Item 5:
+The Yard
+10
+1
+0
+Flag football
+1
+Defect 1:
+Glitch1
+11
+10
+10
+0
+
+Testing
 
 0

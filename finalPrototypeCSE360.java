@@ -1,4 +1,4 @@
-//package Prototype;
+package application;
 
 //package StartUp;
 
@@ -102,7 +102,7 @@ import java.util.Scanner;*/
                         	//*************************
                         	// Sets project to what was saved in the file and allows you to view/edit
                         	//*************************
-                        	myP.load(path);
+                        	myP.load(path, 0);
                         	myP.edit();
                         }
                         else {
@@ -124,7 +124,7 @@ import java.util.Scanner;*/
 
     }
     public static void createUser() throws IOException {
-        File UserData = new File("C:\\Users\\benja\\Documents\\CSE360\\EffortLogger\\Projectoriginal\\CSE360-Project\\CSE360-Project\\userData.txt");
+        File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\UserAuth\\src\\Prototype\\userData.txt");
         BufferedWriter brw = new BufferedWriter(new FileWriter(UserData, true));
         Scanner input4 = new Scanner(System.in);
         System.out.println("Create a  Username : ");
@@ -154,7 +154,7 @@ public static void createProject() throws IOException {
 		// repeatedly ask the Scrum master to print all backLog items
         // or search for, edit, add or remove a backlog item
 		  Project myProject = new Project();
-		  myProject.load(p);
+		  myProject.load(p, 0);
 		  myProject.edit();
 	}
  }

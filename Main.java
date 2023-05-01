@@ -2,7 +2,7 @@
 //Contributors: Benjamin Jones, Logan Goswick
 
 
-package runProj;
+package application;
 	
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -126,19 +126,19 @@ Project addedProject = new Project();
 	 * Keeps track of the current project, 
 	 * backLogItem and defect we are working on and their indexes
 	 ***************************************************************/
-	Project curP;
+	Project curP = new Project();
 	BackLogItem addedB = new BackLogItem();
 	Defect addedD = new Defect();
 	int pI = 0;
 	int dI = 0;
-	Defect curD;
-	BackLogItem curBl;
+	Defect curD = new Defect();
+	BackLogItem curBl = new BackLogItem();
 	int bLI = 0;
 	ArrayList<Project> ListOfProjects = new ArrayList<Project>();
 	/*
 	 * Just the path I have hard coded for the project to load and save
 	 */
-	String path = "project.txt";
+	String path = "C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\project.txt";
 	/********************************************************
 	 * Buttons tabs and panes, plus the userName and pWord
 	 ********************************************************/
@@ -192,7 +192,7 @@ Project addedProject = new Project();
 	RadioButton existingProj = new RadioButton("Existing Project");
 	RadioButton newProj = new RadioButton("New Project");
 	ToggleGroup projectOptions = new ToggleGroup();
-	Button enterbtn = new Button("Enter ");
+	Button enterbtn = new Button("Create Project ");
 	TextArea toDisplay = new TextArea();
 	String projName;
 	int difficulty, defects, time;
@@ -249,8 +249,7 @@ Project addedProject = new Project();
 	Label dSymLbl = new Label("Symptom(s): ");
 	Label dSolLbl = new Label("Solution: ");
 	
-	
-	Button newProjBtn = new Button("Create Project");
+	Button newProjBtn = new Button("Add a new Project");
 	Label projNameLbl = new Label("Project Name: ");
 	Label projDiffLbl = new Label("Project Difficulty Level: ");
 	Label projDefectsLbl = new Label("Project Defects: ");
@@ -269,11 +268,13 @@ Project addedProject = new Project();
 		* Initializes projects and sets current project, backLogItem and defects to the first one
 		******************************************************************************************/
 		populate(path, ListOfProjects);
-		EncryptOrDecrypt("userData.txt");
-		EncryptOrDecrypt("dataBase.txt");
-		curP = ListOfProjects.get(0);
-		curBl = curP.backLogItems.get(0);
-		curD = curBl.defects.get(0);
+		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\userData.txt");
+		EncryptOrDecrypt("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\dataBase.txt");
+		if (ListOfProjects.size() > 0) {
+			curP = ListOfProjects.get(0);
+			curBl = curP.backLogItems.get(0);
+			curD = curBl.defects.get(0);
+		}
 		// Create a GridPane object and set its properties
 		pane.setAlignment(Pos.CENTER); //center the GridPane
 		pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -412,9 +413,9 @@ Project addedProject = new Project();
 		bLTimeETF = new TextField("" + curBl.getTimeE());
 		bLTimeETF.setEditable(false);
 		
-		bLDifTF.setOnAction(new backLogTextFieldHandler());
+		/*bLDifTF.setOnAction(new backLogTextFieldHandler());
 		bLTimeTF.setOnAction(new backLogTextFieldHandler());
-		bLDesTF.setOnAction(new backLogTextFieldHandler());
+		bLDesTF.setOnAction(new backLogTextFieldHandler());*/
 		newBlName.setOnAction(new backLogTextFieldHandler());
 		removeBackLogItemBtn.setOnAction(new removeButtonHandler());
 		addBackLogItemBtn.setOnAction(new addButtonHandler());
@@ -471,11 +472,11 @@ Project addedProject = new Project();
 				removeDefectBtn.setOnAction(new removeButtonHandler());
 				addDefectBtn.setOnAction(new addButtonHandler());
 				
-				dDifTF.setOnAction(new backLogTextFieldHandler());
+				/*dDifTF.setOnAction(new backLogTextFieldHandler());
 				dTimeTF.setOnAction(new backLogTextFieldHandler());
 				dRecTF.setOnAction(new backLogTextFieldHandler());
 				dSymTF.setOnAction(new backLogTextFieldHandler());
-				dSolTF.setOnAction(new backLogTextFieldHandler());
+				dSolTF.setOnAction(new backLogTextFieldHandler());*/
 				dCauseTF.setOnAction(new backLogTextFieldHandler());
 				newDName.setOnAction(new backLogTextFieldHandler());
 				
@@ -552,7 +553,7 @@ Project addedProject = new Project();
 				/*
 				 * Reads through userdata file to check if we have a userName and password that match our input
 				 */
-				File UserData = new File("userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
+				File UserData = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\userData.txt"); //currently using a txt file to store user data once the SQL database has been established this will be updated
 		        BufferedReader br = new BufferedReader(new FileReader(UserData));
 		        Scanner scanner = new Scanner(UserData);
 		        Scanner input = new Scanner(System.in);
@@ -650,6 +651,15 @@ Project addedProject = new Project();
 		
 		private class SubmitBtnMainHandler implements EventHandler<ActionEvent>{
 			public void handle(ActionEvent e) {
+				curBl.setDescription(bLDesTF.getText());
+				curBl.setDif(Integer.parseInt(bLDifTF.getText()));
+				curBl.setTime(Integer.parseInt(bLTimeTF.getText()));
+				curD.setCause(dCauseTF.getText());
+				curD.setSolution(dSolTF.getText());
+				curD.setSymptoms(dSymTF.getText());
+				curD.setDif(Integer.parseInt(dDifTF.getText()));
+				curD.setTime(Integer.parseInt(dTimeTF.getText()));
+				curD.setRec(Integer.parseInt(dRecTF.getText()));
 				Label submission = new Label("Submitted.");
 				pane.add(submission, 2, 8);
 				/*ProjectList.getSelectionModel().clearSelection();
@@ -676,15 +686,8 @@ Project addedProject = new Project();
 						e1.printStackTrace();
 					}
 				}
-				try {
-					ListOfProjects.get(0).makeReport("report.txt");
-					
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				EncryptOrDecrypt("userData.txt");
-				EncryptOrDecrypt("dataBase.txt");
+				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\userData.txt");
+				EncryptOrDecrypt("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\dataBase.txt");
 				EncryptOrDecrypt(path);
 			}
 		}
@@ -696,7 +699,7 @@ Project addedProject = new Project();
 		private class projectComboHandler implements EventHandler<ActionEvent> {
 			public void handle(ActionEvent e) {
 				pI = ProjectList.getSelectionModel().getSelectedIndex();
-				curP = new Project();
+				//curP = new Project();
 				curP = ListOfProjects.get(pI);
 				/*********************
 				 update backLogItem list
@@ -717,6 +720,9 @@ Project addedProject = new Project();
 		
 		private class backlogComboHandler implements EventHandler<ActionEvent> {
 			public void handle(ActionEvent e) {
+				curBl.setDescription(bLDesTF.getText());
+				curBl.setDif(Integer.parseInt(bLDifTF.getText()));
+				curBl.setTime(Integer.parseInt(bLTimeTF.getText()));
 				bLI = BackLogItem.getSelectionModel().getSelectedIndex();
 				if (bLI == -1) {
 					bLI = 0;
@@ -727,6 +733,7 @@ Project addedProject = new Project();
 				bLTimeETF.setText("" + curBl.getTimeE());
 				bLDesTF.setText(curBl.getDescription());
 				bLTimeRTF.setText("" + curBl.getTimeR());
+				bLCurTimeETF.setText(hoursDisplay + ":" + minutesDisplay + ":" + secondsDisplay);
 				/*********************
 				 update defect list
 				 */
@@ -741,8 +748,14 @@ Project addedProject = new Project();
 		
 		private class defectComboHandler implements EventHandler<ActionEvent> {
 			public void handle(ActionEvent e) {
+				curD.setCause(dCauseTF.getText());
+				curD.setSolution(dSolTF.getText());
+				curD.setSymptoms(dSymTF.getText());
+				curD.setDif(Integer.parseInt(dDifTF.getText()));
+				curD.setTime(Integer.parseInt(dTimeTF.getText()));
+				curD.setRec(Integer.parseInt(dRecTF.getText()));
 				dI = Defect.getSelectionModel().getSelectedIndex();
-				curD = new Defect();
+				//curD = new Defect();
 				if (dI < 0) {
 					dI = 0;
 				}
@@ -772,7 +785,7 @@ Project addedProject = new Project();
 					 items = new ArrayList<String>();
 					 com.backLogItems.clear();
 					 Scanner sc = null;
-					 file = new File("dataBase.txt");
+					 file = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\dataBase.txt");
 				     //numTypes = Integer.parseInt(projectTypeName) - 1;
 				        projectTypeName = ProjectType.getSelectionModel().getSelectedItem();
 				        //System.out.println("Ok, your project is a " + projectTypeName);
@@ -930,51 +943,7 @@ Project addedProject = new Project();
 		private class backLogTextFieldHandler implements EventHandler<ActionEvent> {
 			
 			public void handle(ActionEvent e) {
-				if (e.getSource().equals(blNameTF)) {
-					curBl.setName(blNameTF.getText().toString());
-					curP.backLogItems.get(bLI).setName(curBl.getName());
-				}
-				else if (e.getSource().equals(bLTimeTF)) {
-					curBl.setTime(Integer.parseInt(bLTimeTF.getText().toString()));
-					curP.backLogItems.get(bLI).setDif(Integer.parseInt(bLTimeTF.getText().toString()));
-				}
-				else if (e.getSource().equals(bLDifTF)) {
-					curBl.setDif(Integer.parseInt(bLDifTF.getText().toString()));
-					curP.backLogItems.get(bLI).setDif(Integer.parseInt(bLDifTF.getText().toString()));
-				}
-				else if (e.getSource().equals(dNameTF)) {
-					curD.setName(dNameTF.getText().toString());
-					curBl.defects.get(dI).setName(curD.getName());
-				}
-				else if (e.getSource().equals(dTimeTF)) {
-					curD.setTime(Integer.parseInt(dTimeTF.getText().toString()));
-					curBl.defects.get(dI).setDif(Integer.parseInt(dTimeTF.getText().toString()));
-				}
-				else if (e.getSource().equals(dDifTF)) {
-					curD.setDif(Integer.parseInt(dDifTF.getText().toString()));
-					curBl.defects.get(dI).setDif(Integer.parseInt(dDifTF.getText().toString()));
-				}
-				else if (e.getSource().equals(dRecTF)) {
-					curD.setDif(Integer.parseInt(dRecTF.getText().toString()));
-					curBl.defects.get(dI).setDif(Integer.parseInt(dRecTF.getText().toString()));
-				}
-				else if (e.getSource().equals(bLDesTF)) {
-					curBl.setDescription(bLDesTF.getText().toString());
-					curP.backLogItems.get(bLI).setDescription(curBl.getDescription());
-				}
-				else if (e.getSource().equals(dSymTF)) {
-					curD.setSymptoms(dSymTF.getText().toString());
-					curBl.defects.get(dI).setSymptoms(curD.getSymptoms());
-				}
-				else if (e.getSource().equals(dCauseTF)) {
-					curD.setName(dCauseTF.getText().toString());
-					curBl.defects.get(dI).setCause(curD.getCause());
-				}
-				else if (e.getSource().equals(dSolTF)) {
-					curD.setSolution(dSolTF.getText().toString());
-					curBl.defects.get(dI).setSolution(curD.getSolution());
-				}
-				else if (e.getSource().equals(projNameFld)) {
+				if (e.getSource().equals(projNameFld)) {
 					addedProject.setName(projNameFld.getSelectedText());
 				}
 				else if (e.getSource().equals(newBlName)) {
@@ -1003,7 +972,7 @@ Project addedProject = new Project();
 		        
 		        //*****************************************
 		        //Create Scanner object for file and terminal
-		        File file = new File("dataBase.txt");
+		        File file = new File("C:\\Users\\benja\\Documents\\ASUWorkspace\\EffortLogger\\src\\application\\dataBase.txt");
 		        Scanner sc = null;
 		        numTypes = -1;
 				try {
