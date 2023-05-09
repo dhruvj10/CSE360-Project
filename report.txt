@@ -1,0 +1,35 @@
+Madden25
+BackLog Items:
+Task 1: Main Menu
+	Difficulty: 2\10
+	Time required: 4 hours.Description: Description
+	Defects:
+	Common Issue #1: Loss of Connection
+		Difficulty: 4\10
+		Time required: 2 hours.
+		Chance of repeating 7\10Solution: Solution8Symptoms: SymptomCause: Cause
+Task 2: Franchise Mode
+	Difficulty: 10\10
+	Time required: 9 hours.Description: Description
+	Defects:
+	Common Issue #1: AI trade logic errors
+		Difficulty: 4\10
+		Time required: 7 hours.
+		Chance of repeating 6\10Solution: Solution8Symptoms: SymptomCause: Cause
+Task 3: Exhibition
+	Difficulty: 7\10
+	Time required: 3 hours.Description: Description
+	Defects:
+	Common Issue #1: Loss of Connection
+		Difficulty: 4\10
+		Time required: 3 hours.
+		Chance of repeating 4\10Solution: SolutionSymptoms: SymptomCause: Cause
+Task 4: The Yard
+	Difficulty: 1\10
+	Time required: 1 hours.Description: 
+	Defects:
+	Common Issue #1: Ball floating on head glitch
+		Difficulty: 1\10
+		Time required: 1 hours.
+		Chance of repeating 1\10Solution: Symptoms: Cause: 
+

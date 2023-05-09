@@ -1,1 +1,2 @@
-# CSE360-Project
+# EffortLogger
+EffortLogger app
